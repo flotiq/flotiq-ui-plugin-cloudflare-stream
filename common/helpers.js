@@ -1,6 +1,10 @@
 export const parsePluginSettings = (settings) => {
   const parsedSettings = JSON.parse(settings || '{}');
 
+  if (Object.keys(parsedSettings).length === 0) {
+    return null;
+  }
+
   return {
     apiKey: parsedSettings?.api_key || '',
     accountId: parsedSettings?.account_id || '',

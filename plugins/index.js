@@ -41,14 +41,17 @@ registerFn(
     handler.on(
       'flotiq.form.sidebar-panel::add',
       ({ contentType, contentObject }) => {
+        const settings = parsePluginSettings(getPluginSettings());
+
         if (
+          !settings ||
           !contentObject ||
           contentType.name !== '_media' ||
           !videoMimeTypes.includes(contentObject.mimeType)
         ) {
           return;
         }
-        const settings = parsePluginSettings(getPluginSettings());
+
         const spaceId = getSpaceId();
         const apiUrl = getApiUrl();
 
