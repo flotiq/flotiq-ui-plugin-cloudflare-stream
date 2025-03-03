@@ -1,8 +1,101 @@
-@font-face {
-  font-family: "Roboto Mono";
-  src: url(./RobotoMono-Medium.ttf) format("truetype");
+/** CONTAINER */
+.flotiq-ui-plugin-cloudflare-stream-container {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px 16px;
+  min-height: 150px;
+  position: relative;
+  gap: 0.5rem;
 }
 
-.plugin-name-cell-renderer {
-  font-family: "Roboto Mono", monospace;
+/** HEADER */
+.flotiq-ui-plugin-cloudflare-stream-header {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/** SNIPPET */
+.flotiq-ui-plugin-cloudflare-stream-pre {
+  width: 100%;
+  overflow: scroll;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-snippet-header {
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-snippet-header-copy {
+  cursor: pointer;
+  content: url('../images/copy.svg');
+  width: 18px;
+  height: 18px;
+}
+
+/** BUTTON */
+
+.flotiq-ui-plugin-cloudflare-stream-button {
+  border: #0083fc 2px solid;
+  color: #0083fc;
+  border-radius: 8px;
+  font-weight: 500;
+  width: fit-content;
+  height: 36px;
+  padding: 0 12px;
+  display: none;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-button:hover {
+  background-color: #0083fc;
+  color: white;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-button--hidden {
+  display: none !important;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-snippet-container {
+  display: none;
+}
+
+/** Loader */
+
+.flotiq-ui-plugin-cloudflare-stream-loader-container {
+  width: 100%;
+  height: 175px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-loader-container--load {
+  display: flex;
+}
+
+.flotiq-ui-plugin-cloudflare-stream__loader {
+  width: 40px;
+  height: 40px;
+  border: 5px solid #ccc;
+  border-top: 5px solid #0083fc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+
+.flotiq-ui-plugin-cloudflare-stream-loader-container:not(.flotiq-ui-plugin-cloudflare-stream-loader-container--load)
+~ #flotiq-ui-plugin-cloudflare-stream-button {
+  display: block;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-button.flotiq-ui-plugin-cloudflare-stream-button--hidden
+~ .flotiq-ui-plugin-cloudflare-stream-snippet-container {
+  display: block;
 }
