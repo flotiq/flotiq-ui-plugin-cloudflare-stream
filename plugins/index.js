@@ -1,20 +1,59 @@
-import { registerFn } from "../common/plugin-element-cache";
-import pluginInfo from "../plugin-manifest.json";
-import cssString from "inline:./styles/style.css";
-import { handleGridPlugin } from "./grid-renderers";
+import { registerFn } from '../common/plugin-element-cache';
+import pluginInfo from '../plugin-manifest.json';
+import cssString from 'inline:./styles/style.css';
+import { handleManagePlugin } from './manage/index.js';
+import { createSidebar } from './sidebar/index.js';
+import { parsePluginSettings } from '../common/helpers.js';
 
-registerFn(pluginInfo, (handler, client) => {
-  /**
-   * Add plugin styles to the head of the document
-   */
-  if (!document.getElementById(`${pluginInfo.id}-styles`)) {
-    const style = document.createElement("style");
-    style.id = `${pluginInfo.id}-styles`;
-    style.textContent = cssString;
-    document.head.appendChild(style);
-  }
+const videoMimeTypes = [
+  'video/mp4',
+  'video/webm',
+  'video/ogg',
+  'video/x-matroska',
+  'video/x-msvideo',
+  'video/quicktime',
+  'video/mpeg',
+  'video/x-flv',
+  'video/3gpp',
+  'video/3gpp2',
+  'video/x-ms-wmv',
+];
 
-  handler.on("flotiq.grid.cell::render", (data) =>
-    handleGridPlugin(data, client, pluginInfo),
-  );
-});
+export default videoMimeTypes;
+
+registerFn(
+  pluginInfo,
+  (handler, _, { toast, getPluginSettings, getSpaceId, getApiUrl }) => {
+    /**
+     * Add plugin styles to the head of the document
+     */
+    if (!document.getElementById(`${pluginInfo.id}-styles`)) {
+      const style = document.createElement('style');
+      style.id = `${pluginInfo.id}-styles`;
+      style.textContent = cssString;
+      document.head.appendChild(style);
+    }
+
+    handler.on('flotiq.plugins.manage::form-schema', () =>
+      handleManagePlugin(),
+    );
+
+    handler.on(
+      'flotiq.form.sidebar-panel::add',
+      ({ contentType, contentObject }) => {
+        if (
+          !contentObject ||
+          contentType.name !== '_media' ||
+          !videoMimeTypes.includes(contentObject.mimeType)
+        ) {
+          return;
+        }
+        const settings = parsePluginSettings(getPluginSettings());
+        const spaceId = getSpaceId();
+        const apiUrl = getApiUrl();
+
+        return createSidebar(contentObject, apiUrl, settings, spaceId, toast);
+      },
+    );
+  },
+);

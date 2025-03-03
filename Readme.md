@@ -1,6 +1,8 @@
 [[_TOC_]]
 
-# Plain JS Plugin
+# Flotiq cloudflare stream plugin
+
+This plugin allow for easy integration of Cloudflare Stream with Flotiq
 
 ## Quick start
 
@@ -26,7 +28,9 @@ The plugins are built into a single `dist/index.js` file. The manifest is copied
 
 ## Loading the plugin
 
-**Warning:** While developing, you can use  `https://localhost:3053/plugin-manifest.json` address to load the plugin manifest. Make sure your browser trusts the local certificate on the latter, to be able to use it e.g. with `https://editor.flotiq.com`
+**Warning:** While developing, you can use  `https://localhost:3053/plugin-manifest.json` address to load the plugin
+manifest. Make sure your browser trusts the local certificate on the latter, to be able to use it e.g. with
+`https://editor.flotiq.com`
 
 ### URL
 
@@ -44,7 +48,7 @@ The plugins are built into a single `dist/index.js` file. The manifest is copied
 
 1. Open Flotiq editor
 2. Open Chrome Dev console
-3. Paste the content of `dist/index.js` 
+3. Paste the content of `dist/index.js`
 4. Navigate to the view that is modified by the plugin
 
 ### Deployment
