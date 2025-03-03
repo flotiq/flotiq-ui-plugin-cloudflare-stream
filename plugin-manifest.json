@@ -2,7 +2,7 @@
   "id": "flotiq.cloudflare-stream-plugin",
   "name": "Cloudflare stream plugin",
   "description": "This plugin allow for easy integration of Cloudflare Stream with Flotiq",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "https://github.com/flotiq/flotiq-ui-plugin-cloudflare-stream",
   "url": "https://localhost:3053/index.js",
   "permissions": []
