@@ -14,14 +14,14 @@
 .flotiq-ui-plugin-cloudflare-stream-header {
   font-size: 16px;
   font-weight: 700;
-  margin-bottom: 16px;
+  color: #141046;
 }
 
 /** SNIPPET */
 .flotiq-ui-plugin-cloudflare-stream-pre {
   width: 100%;
   overflow: scroll;
-  padding: 5px;
+  padding: 16px 0;
   font-size: 14px;
 }
 
@@ -31,6 +31,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid #E5E7EB;
+  padding: 5px 0 5px;
+  color: #141046;
 }
 
 .flotiq-ui-plugin-cloudflare-stream-snippet-header-copy {
@@ -46,11 +49,19 @@
   border: #0083fc 2px solid;
   color: #0083fc;
   border-radius: 8px;
-  font-weight: 500;
+  font-weight: 600;
   width: fit-content;
   height: 36px;
   padding: 0 12px;
+  margin: 16px 0;
   display: none;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-button:before {
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 5px;
+  height: 17px;
 }
 
 .flotiq-ui-plugin-cloudflare-stream-button:hover {
@@ -62,8 +73,29 @@
   display: none !important;
 }
 
+#flotiq-ui-plugin-cloudflare-stream-button:before {
+  content: url('../images/code.svg');
+}
+
+#flotiq-ui-plugin-cloudflare-stream-button:hover:before {
+  content: url('../images/code-white.svg');
+}
+
+#flotiq-ui-plugin-cloudflare-stream-preview-button:before {
+  content: url('../images/preview.svg');
+}
+
+#flotiq-ui-plugin-cloudflare-stream-preview-button:hover:before {
+  content: url('../images/preview-white.svg');
+}
+
+/** snippet container */
+
 .flotiq-ui-plugin-cloudflare-stream-snippet-container {
   display: none;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 /** Loader */
@@ -89,9 +121,13 @@
   animation: spin 1s linear infinite;
 }
 
-
 .flotiq-ui-plugin-cloudflare-stream-loader-container:not(.flotiq-ui-plugin-cloudflare-stream-loader-container--load)
 ~ #flotiq-ui-plugin-cloudflare-stream-button {
+  display: block;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-button.flotiq-ui-plugin-cloudflare-stream-button--hidden
+~ #flotiq-ui-plugin-cloudflare-stream-preview-button {
   display: block;
 }
 

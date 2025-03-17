@@ -27,7 +27,7 @@ function checkIfVideoExist(
       if (result.length === 0) return;
 
       const media = result[0];
-      codeSnippetElement.innerHTML = getSnippet(customerSubDomain, media.uid);
+      codeSnippetElement.textContent = getSnippet(customerSubDomain, media.uid);
       buttonElement.classList.add(
         'flotiq-ui-plugin-cloudflare-stream-button--hidden',
       );
@@ -56,7 +56,10 @@ function handleSaveVideo(
         'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
       );
 
-      codeSnippetElement.innerHTML = getSnippet(customerSubDomain, result.uid);
+      codeSnippetElement.textContent = getSnippet(
+        customerSubDomain,
+        result.uid,
+      );
 
       buttonElement.classList.add(
         'flotiq-ui-plugin-cloudflare-stream-button--hidden',

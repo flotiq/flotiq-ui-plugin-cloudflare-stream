@@ -23,7 +23,11 @@ export default videoMimeTypes;
 
 registerFn(
   pluginInfo,
-  (handler, _, { toast, getPluginSettings, getSpaceId, getApiUrl }) => {
+  (
+    handler,
+    _,
+    { toast, getPluginSettings, getSpaceId, getApiUrl, openModal },
+  ) => {
     /**
      * Add plugin styles to the head of the document
      */
@@ -55,7 +59,14 @@ registerFn(
         const spaceId = getSpaceId();
         const apiUrl = getApiUrl();
 
-        return createSidebar(contentObject, apiUrl, settings, spaceId, toast);
+        return createSidebar(
+          contentObject,
+          apiUrl,
+          settings,
+          spaceId,
+          toast,
+          openModal,
+        );
       },
     );
   },
