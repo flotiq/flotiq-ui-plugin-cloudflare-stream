@@ -5,5 +5,11 @@
   "version": "0.1.0",
   "repository": "https://github.com/flotiq/flotiq-ui-plugin-cloudflare-stream",
   "url": "https://localhost:3053/index.js",
-  "permissions": []
+  "permissions": [
+    {
+      "ctdName": "_plugin_settings",
+      "canUpdate": true,
+      "type": "CO"
+    }
+  ]
 }

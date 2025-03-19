@@ -3,7 +3,10 @@ import pluginInfo from '../plugin-manifest.json';
 import cssString from 'inline:./styles/style.css';
 import { handleManagePlugin } from './manage/index.js';
 import { createSidebar } from './sidebar/index.js';
-import { parsePluginSettings } from '../common/helpers.js';
+import {
+  buildSaveSnippetToConfig,
+  parsePluginSettings,
+} from '../common/helpers.js';
 
 const videoMimeTypes = [
   'video/mp4',
@@ -25,7 +28,7 @@ registerFn(
   pluginInfo,
   (
     handler,
-    _,
+    client,
     { toast, getPluginSettings, getSpaceId, getApiUrl, openModal },
   ) => {
     /**
@@ -59,6 +62,8 @@ registerFn(
         const spaceId = getSpaceId();
         const apiUrl = getApiUrl();
 
+        const saveSnippet = buildSaveSnippetToConfig(client, settings, toast);
+
         return createSidebar(
           contentObject,
           apiUrl,
@@ -66,6 +71,7 @@ registerFn(
           spaceId,
           toast,
           openModal,
+          saveSnippet,
         );
       },
     );

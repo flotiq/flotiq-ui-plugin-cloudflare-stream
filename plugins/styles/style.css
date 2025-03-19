@@ -57,6 +57,10 @@
   display: none;
 }
 
+.flotiq-ui-plugin-cloudflare-stream-button--small-margin {
+  margin: 8px 0;
+}
+
 .flotiq-ui-plugin-cloudflare-stream-button:before {
   vertical-align: middle;
   display: inline-block;
@@ -71,6 +75,10 @@
 
 .flotiq-ui-plugin-cloudflare-stream-button--hidden {
   display: none !important;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-button--visible {
+  display: block;
 }
 
 #flotiq-ui-plugin-cloudflare-stream-button:before {
@@ -92,10 +100,13 @@
 /** snippet container */
 
 .flotiq-ui-plugin-cloudflare-stream-snippet-container {
-  display: none;
   border: 1px solid #E5E7EB;
   border-radius: 10px;
   padding: 10px;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-snippet-container--hidden {
+  display: none;
 }
 
 /** Loader */
@@ -134,4 +145,111 @@
 .flotiq-ui-plugin-cloudflare-stream-button.flotiq-ui-plugin-cloudflare-stream-button--hidden
 ~ .flotiq-ui-plugin-cloudflare-stream-snippet-container {
   display: block;
+}
+
+/** MODAL */
+.flotiq-ui-plugin-cloudflare-stream-preview-modal-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  position: relative;
+  gap: 28px;
+}
+
+#flotiq-ui-plugin-cloudflare-stream-snippet-in-modal-preview {
+  grid-column: 1 / span 7;
+}
+
+#flotiq-ui-plugin-cloudflare-stream-snippet-in-modal-container {
+  display: flex;
+  flex-direction: column;
+  grid-column: 8 / span 5;
+}
+
+/** MODAL PREVIEW*/
+.flotiq-ui-plugin-cloudflare-stream-preview-modal-container iframe {
+  width: 100%;
+  height: 480px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #000;
+}
+
+#flotiq-ui-plugin-cloudflare-stream-snippet-in-modal-container pre {
+  height: 250px;
+}
+
+/** MODAL CONTROL*/
+.flotiq-ui-plugin-cloudflare-stream-snippet-settings-container {
+  padding-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 2fr);
+  position: relative;
+  gap: 10px;
+}
+
+/** SWITCH */
+
+.flotiq-ui-plugin-cloudflare-stream-toggle-switch-container {
+  display: flex;
+  justify-content: center;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin-right: 15px;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 24px;
+  width: 100%;
+  height: 100%;
+  transition: background-color 0.3s;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-slider::before {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-toggle-switch input:checked + .flotiq-ui-plugin-cloudflare-stream-slider {
+  background-color: #0083fc;
+}
+
+.flotiq-ui-plugin-cloudflare-stream-toggle-switch input:checked + .flotiq-ui-plugin-cloudflare-stream-slider::before {
+  transform: translateX(26px);
+}
+
+/** MODAL COPY CODE BUTTON */
+
+.flotiq-ui-plugin-cloudflare-stream-copy-button-container{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 40px;
+}
+
+#flotiq-ui-plugin-cloudflare-stream-copy-button:before {
+  content: url('../images/copy-blue.svg');
+}
+
+#flotiq-ui-plugin-cloudflare-stream-copy-button:hover:before {
+  content: url('../images/copy-white.svg');
 }

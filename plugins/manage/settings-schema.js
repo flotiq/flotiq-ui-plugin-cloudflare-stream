@@ -28,6 +28,9 @@ export const schema = {
             type: 'string',
             minLength: 1,
           },
+          snippets: {
+            type: 'string',
+          },
         },
       },
     ],
@@ -35,7 +38,7 @@ export const schema = {
     additionalProperties: false,
   },
   metaDefinition: {
-    order: ['api_key', 'account_id', 'customer_sub_domain'],
+    order: ['api_key', 'account_id', 'customer_sub_domain', 'snippets'],
     propertiesConfig: {
       api_key: {
         label: 'Api token',
@@ -52,6 +55,13 @@ export const schema = {
       customer_sub_domain: {
         label: 'Customer subdomain',
         unique: false,
+        helpText: '',
+        inputType: 'text',
+      },
+      snippets: {
+        label: '',
+        unique: false,
+        hidden: true,
         helpText: '',
         inputType: 'text',
       },

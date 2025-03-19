@@ -42,19 +42,3 @@ export async function getVideo(videoName, apiToken, accountId) {
     },
   );
 }
-
-/**
- * Build iframe with selected video to render in player
- * @param customerSubDomian
- * @param uuId
- * @returns {string}
- */
-export function getSnippet(customerSubDomian, uuId) {
-  return `
-<iframe
- src="https://${customerSubDomian}/${uuId}/iframe"
- allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
- allowfullscreen="true"
- id="stream-player"
-</iframe>`.replace(/\t/g, '');
-}

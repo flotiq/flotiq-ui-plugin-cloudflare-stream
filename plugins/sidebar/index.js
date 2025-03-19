@@ -3,77 +3,20 @@ import {
   addElementToCache,
   getCachedElement,
 } from '../../common/plugin-element-cache.js';
-import { getSnippet, getVideo, saveVideo } from './lib/index.js';
 import { getMediaName, getMediaUrl } from '../../common/helpers.js';
 import template from 'inline:../templates/template.html';
-
-function checkIfVideoExist(
-  buttonElement,
-  loaderElement,
-  codeSnippetElement,
-  mediaName,
-  apiKey,
-  accountId,
-  customerSubDomain,
-) {
-  //@todo add error handling
-  getVideo(mediaName, apiKey, accountId)
-    .then((response) => response.json())
-    .then(({ result }) => {
-      loaderElement.classList.remove(
-        'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
-      );
-
-      if (result.length === 0) return;
-
-      const media = result[0];
-      codeSnippetElement.textContent = getSnippet(customerSubDomain, media.uid);
-      buttonElement.classList.add(
-        'flotiq-ui-plugin-cloudflare-stream-button--hidden',
-      );
-    });
-}
-
-function handleSaveVideo(
-  buttonElement,
-  loaderElement,
-  codeSnippetElement,
-  mediaUrl,
-  mediaName,
-  apiKey,
-  accountId,
-  customerSubDomain,
-  toast,
-) {
-  loaderElement.classList.add(
-    'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
-  );
-  //@todo add error handling
-  saveVideo(mediaUrl, mediaName, apiKey, accountId)
-    .then((response) => response.json())
-    .then(({ result }) => {
-      loaderElement.classList.remove(
-        'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
-      );
-
-      codeSnippetElement.textContent = getSnippet(
-        customerSubDomain,
-        result.uid,
-      );
-
-      buttonElement.classList.add(
-        'flotiq-ui-plugin-cloudflare-stream-button--hidden',
-      );
-      toast.success('Video saved successfully!');
-    });
-}
+import checkIfVideoExist from './lib/checkIfVideoExists.js';
+import handleSaveVideo from './lib/handleSaveVideo.js';
+import openPreviewModal from './lib/openPreviewModal.js';
 
 export const createSidebar = (
   contentObject,
   apiUrl,
-  { apiKey, accountId, customerSubDomain },
+  { apiKey, accountId, customerSubDomain, snippets },
   spaceId,
   toast,
+  openModal,
+  saveSnippet,
 ) => {
   const containerCacheKey = `${pluginInfo.id}-${contentObject.id || 'new'}-cloudflare-stream-plugin-container`;
   let cloudflareStreamPluginContainer =
@@ -90,8 +33,12 @@ export const createSidebar = (
 
     cloudflareStreamPluginContainer.innerHTML = template;
 
-    const btn = cloudflareStreamPluginContainer.querySelector(
+    const saveVideoBtn = cloudflareStreamPluginContainer.querySelector(
       '#flotiq-ui-plugin-cloudflare-stream-button',
+    );
+
+    const previewModeBtn = cloudflareStreamPluginContainer.querySelector(
+      '#flotiq-ui-plugin-cloudflare-stream-preview-button',
     );
 
     const loader = cloudflareStreamPluginContainer.querySelector(
@@ -107,18 +54,21 @@ export const createSidebar = (
     );
 
     checkIfVideoExist(
-      btn,
+      saveVideoBtn,
       loader,
       codeSnippet,
       mediaName,
       apiKey,
       accountId,
       customerSubDomain,
+      toast,
+      snippets,
+      saveSnippet,
     );
 
-    btn.addEventListener('click', () => {
+    saveVideoBtn.addEventListener('click', () => {
       handleSaveVideo(
-        btn,
+        saveVideoBtn,
         loader,
         codeSnippet,
         mediaUrl,
@@ -127,6 +77,17 @@ export const createSidebar = (
         accountId,
         customerSubDomain,
         toast,
+      );
+    });
+
+    previewModeBtn.addEventListener('click', () => {
+      openPreviewModal(
+        openModal,
+        mediaName,
+        contentObject.id,
+        customerSubDomain,
+        snippets,
+        mediaName,
       );
     });
 
