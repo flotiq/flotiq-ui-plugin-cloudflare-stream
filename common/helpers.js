@@ -1,5 +1,6 @@
 import { schema as pluginInfo } from '../plugins/manage/settings-schema.js';
 import { addObjectToCache, getCachedElement } from './plugin-element-cache.js';
+import i18n from '../i18n.js';
 
 export function encodePluginSettings(settings) {
   return {
@@ -73,8 +74,7 @@ export function buildSaveSnippetToConfig(client, toast) {
 
     if (!ok) {
       console.error(pluginInfo.id, 'updating plugin settings', body);
-      //@todo add translations
-      toast.error('SettingsUpdateError', { duration: 5000 });
+      toast.error(i18n.t('settingsUpdateError'), { duration: 5000 });
       return;
     }
     addObjectToCache('settings', encodePluginSettings(newSettings));

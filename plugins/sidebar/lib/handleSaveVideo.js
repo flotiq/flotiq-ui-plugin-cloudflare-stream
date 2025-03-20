@@ -4,6 +4,7 @@ import {
   getCachedElement,
 } from '../../../common/plugin-element-cache.js';
 import { saveVideo } from './cloudflareApi.js';
+import i18n from '../../../i18n.js';
 
 /**
  * Handles saving video to cloudflare streaming
@@ -12,6 +13,7 @@ import { saveVideo } from './cloudflareApi.js';
  * @param {HTMLElement} codeSnippetElement
  * @param {string} mediaUrl
  * @param {string} mediaName
+ * @param {function} saveSnippet
  * @param  toast
  */
 export default function handleSaveVideo(
@@ -20,6 +22,7 @@ export default function handleSaveVideo(
   codeSnippetElement,
   mediaUrl,
   mediaName,
+  saveSnippet,
   toast,
 ) {
   const { apiKey, accountId, customerSubDomain } = getCachedElement('settings');
@@ -28,24 +31,28 @@ export default function handleSaveVideo(
     'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
   );
 
-  //@todo add error handling
-  //@todo add saving snippet into config
   saveVideo(mediaUrl, mediaName, apiKey, accountId)
     .then((response) => response.json())
-    .then(({ result }) => {
-      loaderElement.classList.remove(
-        'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
-      );
-
+    .then(async ({ result }) => {
       addObjectToCache(`${mediaName}-media-uid`, result.uid);
       codeSnippetElement.textContent = getSnippet(
         customerSubDomain,
         result.uid,
       );
 
+      const snippet = getSnippet(customerSubDomain, result.uid);
+      await saveSnippet(mediaName, result.uid, snippet);
+
+      loaderElement.classList.remove(
+        'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
+      );
       buttonElement.classList.add(
         'flotiq-ui-plugin-cloudflare-stream-button--hidden',
       );
-      toast.success('Video saved successfully!');
+      toast.success(i18n.t('videoSavedInCloudflare'), { duration: 5000 });
+    })
+    .catch((e) => {
+      console.error(e);
+      toast.error(i18n.t('errorMessage'), { duration: 5000 });
     });
 }

@@ -2,6 +2,7 @@ import { schema as pluginInfo } from '../../manage/settings-schema.js';
 import { getCachedElement } from '../../../common/plugin-element-cache.js';
 import modal from 'inline:../../templates/modal.html';
 import { buildSwitch, handleVideoSettingsChange } from './snippetHelpers.js';
+import i18n from '../../../i18n';
 
 /**
  *
@@ -12,6 +13,7 @@ import { buildSwitch, handleVideoSettingsChange } from './snippetHelpers.js';
  * @param {function} saveSnippet
  * @param {string} containerCacheKey
  * @param {HTMLElement} sidebarSnippetRef
+ * @param {object} toast
  * @returns {Promise<void>}
  */
 export default async function openPreviewModal(
@@ -22,6 +24,7 @@ export default async function openPreviewModal(
   saveSnippet,
   containerCacheKey,
   sidebarSnippetRef,
+  toast,
 ) {
   const { customerSubDomain, snippets } = getCachedElement('settings');
 
@@ -60,13 +63,27 @@ export default async function openPreviewModal(
       '#flotiq-ui-plugin-cloudflare-stream-save-settings-button',
     );
 
+    const copyToClipboardBtn = cloudflareStreamPluginPreviewModal.querySelector(
+      '#flotiq-ui-plugin-cloudflare-stream-snippet-modal-header-copy',
+    );
+
+    const snippetHeader = cloudflareStreamPluginPreviewModal.querySelector(
+      '.flotiq-ui-plugin-cloudflare-stream-snippet-header-content',
+    );
+
+    copyToClipboardBtn.textContent = i18n.t('modal.saveSettings');
+    snippetHeader.textContent = i18n.t('snippet');
+
     previewContainer.innerHTML = snippet;
     snippetContainer.textContent = snippet;
 
-    //@todo add translations
     settingsContainer.innerHTML = Object.keys(config)
       .map((settingsElement) =>
-        buildSwitch(settingsElement, config[settingsElement]),
+        buildSwitch(
+          settingsElement,
+          i18n.t(`modal.settings.${settingsElement}`),
+          config[settingsElement],
+        ),
       )
       .join('');
 
@@ -85,10 +102,16 @@ export default async function openPreviewModal(
       modalContainerCacheKey,
       containerCacheKey,
     );
+
+    copyToClipboardBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(snippetContainer.innerText).then(() => {
+        toast.success(i18n.t('copySuccess'), { duration: 5000 });
+      });
+    });
   }
 
   await openModal({
-    title: 'Video settings',
+    title: i18n.t('modal.title'),
     size: '3xl',
     content: cloudflareStreamPluginPreviewModal,
   });

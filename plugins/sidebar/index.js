@@ -8,6 +8,7 @@ import template from 'inline:../templates/template.html';
 import checkIfVideoExist from './lib/checkIfVideoExists.js';
 import handleSaveVideo from './lib/handleSaveVideo.js';
 import openPreviewModal from './lib/openPreviewModal.js';
+import i18n from 'i18next';
 
 export const createSidebar = (
   contentObject,
@@ -52,13 +53,26 @@ export const createSidebar = (
       '#flotiq-ui-plugin-cloudflare-stream-snippet-header-copy',
     );
 
+    const pluginHeader = cloudflareStreamPluginContainer.querySelector(
+      '.flotiq-ui-plugin-cloudflare-stream-header',
+    );
+
+    const snippetHeader = cloudflareStreamPluginContainer.querySelector(
+      '.flotiq-ui-plugin-cloudflare-stream-snippet-header-content',
+    );
+
+    saveVideoBtn.textContent = i18n.t('generateStreamIframe');
+    previewModeBtn.textContent = i18n.t('previewTool');
+    pluginHeader.textContent = i18n.t('title');
+    snippetHeader.textContent = i18n.t('snippet');
+
     checkIfVideoExist(
       saveVideoBtn,
       loader,
       codeSnippet,
       mediaName,
-      toast,
       saveSnippet,
+      toast,
     );
 
     saveVideoBtn.addEventListener('click', () => {
@@ -68,6 +82,7 @@ export const createSidebar = (
         codeSnippet,
         mediaUrl,
         mediaName,
+        saveSnippet,
         toast,
       );
     });
@@ -81,12 +96,13 @@ export const createSidebar = (
         saveSnippet,
         containerCacheKey,
         codeSnippet,
+        toast,
       );
     });
 
     copyToClipboardBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(codeSnippet.innerText).then(() => {
-        toast.success('Code copied to clipboard!');
+        toast.success(i18n.t('copySuccess'), { duration: 5000 });
       });
     });
 

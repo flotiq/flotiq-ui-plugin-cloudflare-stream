@@ -1,6 +1,7 @@
 import { getSnippet } from './snippetHelpers.js';
 import { getVideo } from './cloudflareApi.js';
 import { getCachedElement } from '../../../common/plugin-element-cache.js';
+import i18n from '../../../i18n';
 
 /**
  *
@@ -16,18 +17,22 @@ export default function checkIfVideoExist(
   loaderElement,
   codeSnippetElement,
   mediaName,
-  toast,
   saveSnippet,
+  toast,
 ) {
   const { apiKey, accountId, customerSubDomain, snippets } =
     getCachedElement('settings');
 
   if (!snippets?.[mediaName]) {
-    //@todo add error handling
     getVideo(mediaName, apiKey, accountId)
       .then((response) => response.json())
       .then(async ({ result }) => {
-        if (result.length === 0) return;
+        if (result.length === 0) {
+          loaderElement.classList.remove(
+            'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
+          );
+          return;
+        }
 
         const media = result[0];
 
@@ -42,7 +47,12 @@ export default function checkIfVideoExist(
         buttonElement.classList.add(
           'flotiq-ui-plugin-cloudflare-stream-button--hidden',
         );
+      })
+      .catch((e) => {
+        console.error(e);
+        toast.error(i18n.t('errorMessage'), { duration: 5000 });
       });
+
     return;
   }
 

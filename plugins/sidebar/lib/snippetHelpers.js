@@ -52,19 +52,19 @@ export function getSnippet(
 }
 
 /**
- *
+ * @param {string} name
  * @param {string} label
  * @param {boolean} selected
  * @returns {string}
  */
-export function buildSwitch(label, selected) {
+export function buildSwitch(name, label, selected) {
   return `
     <div class="flotiq-ui-plugin-cloudflare-stream-toggle-switch-container">
         <label class="flotiq-ui-plugin-cloudflare-stream-toggle-switch">
             <input
                 class="flotiq-ui-plugin-cloudflare-stream-toggle-switch-input"
                  type="checkbox"
-                 name="${label}"
+                 name="${name}"
                  ${selected && 'checked'}
             />
             <span class="flotiq-ui-plugin-cloudflare-stream-slider"></span>
