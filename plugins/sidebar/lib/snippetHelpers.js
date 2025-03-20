@@ -1,3 +1,5 @@
+import { deleteCachedElement } from '../../../common/plugin-element-cache.js';
+
 /**
  * Build iframe with selected video to render in player
  * @param {string} customerSubDomian
@@ -51,18 +53,19 @@ export function getSnippet(
 
 /**
  *
- * @param label
- * @param name
+ * @param {string} label
+ * @param {boolean} selected
  * @returns {string}
  */
-export function buildSwitch(label) {
+export function buildSwitch(label, selected) {
   return `
     <div class="flotiq-ui-plugin-cloudflare-stream-toggle-switch-container">
         <label class="flotiq-ui-plugin-cloudflare-stream-toggle-switch">
-            <input 
+            <input
                 class="flotiq-ui-plugin-cloudflare-stream-toggle-switch-input"
                  type="checkbox"
                  name="${label}"
+                 ${selected && 'checked'}
             />
             <span class="flotiq-ui-plugin-cloudflare-stream-slider"></span>
         </label>
@@ -70,12 +73,73 @@ export function buildSwitch(label) {
     </div>`;
 }
 
-export function handleVideoSettingsChange(container) {
+/**
+ *
+ * @param {HTMLDivElement} container
+ * @param {HTMLDivElement} previewRef
+ * @param {HTMLPreElement} snippetRef
+ * @param {HTMLDivElement} loaderRef
+ * @param {HTMLButtonElement} saveSettingsButtonRef
+ * @param {HTMLElement} sidebarSnippetRef
+ * @param {object} config
+ * @param {string} customerSubDomain
+ * @param {string} uId
+ * @param {string} mediaName
+ * @param {function} saveSnippet
+ * @param {string} modalContainerCacheKey
+ * @param {string} containerCacheKey
+
+ */
+export function handleVideoSettingsChange(
+  container,
+  previewRef,
+  snippetRef,
+  loaderRef,
+  saveSettingsButtonRef,
+  sidebarSnippetRef,
+  config,
+  customerSubDomain,
+  uId,
+  mediaName,
+  saveSnippet,
+  modalContainerCacheKey,
+  containerCacheKey,
+) {
+  const newConfig = { ...config };
+
   container
     .querySelectorAll('.flotiq-ui-plugin-cloudflare-stream-toggle-switch-input')
     .forEach((input) => {
       input.addEventListener('change', (event) => {
-        console.log(event.target.name, event.target.checked);
+        newConfig[event.target.name] = event.target.checked;
+
+        const snippetConfig = {
+          customerSubDomain,
+          uId,
+          ...newConfig,
+        };
+
+        const snippet = getSnippet(...Object.values(snippetConfig));
+        previewRef.innerHTML = snippet;
+        snippetRef.textContent = snippet;
       });
     });
+
+  saveSettingsButtonRef.addEventListener('click', () => {
+    loaderRef.classList.add(
+      'flotiq-ui-plugin-cloudflare-stream-modal-loader-container--load',
+    );
+
+    const snippet = snippetRef.textContent;
+    sidebarSnippetRef.textContent = snippet;
+    //@todo add success message
+    //@todo add error handling
+    saveSnippet(mediaName, uId, snippet, newConfig).then(() => {
+      loaderRef.classList.remove(
+        'flotiq-ui-plugin-cloudflare-stream-modal-loader-container--load',
+      );
+      deleteCachedElement(containerCacheKey);
+      deleteCachedElement(modalContainerCacheKey);
+    });
+  });
 }

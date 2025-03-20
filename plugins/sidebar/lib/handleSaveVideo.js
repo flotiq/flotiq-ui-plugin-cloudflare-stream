@@ -1,5 +1,8 @@
 import { getSnippet } from './snippetHelpers.js';
-import { addObjectToCache } from '../../../common/plugin-element-cache.js';
+import {
+  addObjectToCache,
+  getCachedElement,
+} from '../../../common/plugin-element-cache.js';
 import { saveVideo } from './cloudflareApi.js';
 
 /**
@@ -9,9 +12,6 @@ import { saveVideo } from './cloudflareApi.js';
  * @param {HTMLElement} codeSnippetElement
  * @param {string} mediaUrl
  * @param {string} mediaName
- * @param {string} apiKey
- * @param {string} accountId
- * @param {string} customerSubDomain
  * @param  toast
  */
 export default function handleSaveVideo(
@@ -20,15 +20,16 @@ export default function handleSaveVideo(
   codeSnippetElement,
   mediaUrl,
   mediaName,
-  apiKey,
-  accountId,
-  customerSubDomain,
   toast,
 ) {
+  const { apiKey, accountId, customerSubDomain } = getCachedElement('settings');
+
   loaderElement.classList.add(
     'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
   );
+
   //@todo add error handling
+  //@todo add saving snippet into config
   saveVideo(mediaUrl, mediaName, apiKey, accountId)
     .then((response) => response.json())
     .then(({ result }) => {

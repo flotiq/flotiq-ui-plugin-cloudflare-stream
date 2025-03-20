@@ -1,7 +1,6 @@
 import { getSnippet } from './snippetHelpers.js';
-import { addObjectToCache } from '../../../common/plugin-element-cache.js';
 import { getVideo } from './cloudflareApi.js';
-import { saveSnippetToConfig } from '../../../common/helpers.js';
+import { getCachedElement } from '../../../common/plugin-element-cache.js';
 
 /**
  *
@@ -9,11 +8,7 @@ import { saveSnippetToConfig } from '../../../common/helpers.js';
  * @param {HTMLDivElement} loaderElement
  * @param {HTMLElement}codeSnippetElement
  * @param {string} mediaName
- * @param {string} apiKey
- * @param {string} accountId
- * @param {string} customerSubDomain
  * @param {object} toast
- * @param {object} snippets
  * @param {function} saveSnippet
  */
 export default function checkIfVideoExist(
@@ -21,14 +16,12 @@ export default function checkIfVideoExist(
   loaderElement,
   codeSnippetElement,
   mediaName,
-  apiKey,
-  accountId,
-  customerSubDomain,
   toast,
-  snippets,
   saveSnippet,
 ) {
-  console.log(snippets);
+  const { apiKey, accountId, customerSubDomain, snippets } =
+    getCachedElement('settings');
+
   if (!snippets?.[mediaName]) {
     //@todo add error handling
     getVideo(mediaName, apiKey, accountId)
@@ -37,9 +30,10 @@ export default function checkIfVideoExist(
         if (result.length === 0) return;
 
         const media = result[0];
+
         const snippet = getSnippet(customerSubDomain, media.uid);
 
-        await saveSnippet(mediaName, snippet);
+        await saveSnippet(mediaName, media.uid, snippet);
         codeSnippetElement.textContent = snippet;
 
         loaderElement.classList.remove(
@@ -58,5 +52,5 @@ export default function checkIfVideoExist(
   buttonElement.classList.add(
     'flotiq-ui-plugin-cloudflare-stream-button--hidden',
   );
-  codeSnippetElement.textContent = snippets[mediaName];
+  codeSnippetElement.textContent = snippets[mediaName].snippet;
 }

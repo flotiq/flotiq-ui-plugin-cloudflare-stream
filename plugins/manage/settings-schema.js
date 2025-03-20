@@ -5,7 +5,7 @@ import pluginInfo from '../../plugin-manifest.json';
 export const schema = {
   id: pluginInfo.id,
   name: pluginInfo.id,
-  label: pluginInfo.name,
+  label: pluginInfo?.name,
   internal: false,
   schemaDefinition: {
     type: 'object',
@@ -28,17 +28,14 @@ export const schema = {
             type: 'string',
             minLength: 1,
           },
-          snippets: {
-            type: 'string',
-          },
         },
       },
     ],
     required: ['api_key', 'account_id', 'customer_sub_domain'],
-    additionalProperties: false,
+    additionalProperties: true,
   },
   metaDefinition: {
-    order: ['api_key', 'account_id', 'customer_sub_domain', 'snippets'],
+    order: ['api_key', 'account_id', 'customer_sub_domain'],
     propertiesConfig: {
       api_key: {
         label: 'Api token',
@@ -55,13 +52,6 @@ export const schema = {
       customer_sub_domain: {
         label: 'Customer subdomain',
         unique: false,
-        helpText: '',
-        inputType: 'text',
-      },
-      snippets: {
-        label: '',
-        unique: false,
-        hidden: true,
         helpText: '',
         inputType: 'text',
       },

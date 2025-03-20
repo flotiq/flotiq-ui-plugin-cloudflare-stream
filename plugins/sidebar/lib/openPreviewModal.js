@@ -1,31 +1,34 @@
 import { schema as pluginInfo } from '../../manage/settings-schema.js';
 import { getCachedElement } from '../../../common/plugin-element-cache.js';
 import modal from 'inline:../../templates/modal.html';
-import { buildSwitch } from './snippetHelpers.js';
-
-const settings = ['controls', 'autoplay', 'loop', 'preload', 'muted', 'lazy'];
+import { buildSwitch, handleVideoSettingsChange } from './snippetHelpers.js';
 
 /**
  *
  * @param {function} openModal
- * @param mediaUrl
- * @param contentObjectId
- * @param customerSubDomain
- * @param mediaName
- * @param snippets
+ * @param {string} mediaUrl
+ * @param {string} contentObjectId
+ * @param {string} mediaName
+ * @param {function} saveSnippet
+ * @param {string} containerCacheKey
+ * @param {HTMLElement} sidebarSnippetRef
  * @returns {Promise<void>}
  */
 export default async function openPreviewModal(
   openModal,
   mediaUrl,
   contentObjectId,
-  customerSubDomain,
-  snippets,
   mediaName,
+  saveSnippet,
+  containerCacheKey,
+  sidebarSnippetRef,
 ) {
-  const containerCacheKey = `${pluginInfo.id}-${contentObjectId}-cloudflare-stream-plugin-preview-modal`;
-  let cloudflareStreamPluginPreviewModal =
-    getCachedElement(containerCacheKey)?.element;
+  const { customerSubDomain, snippets } = getCachedElement('settings');
+
+  const modalContainerCacheKey = `${pluginInfo.id}-${contentObjectId}-cloudflare-stream-plugin-preview-modal`;
+  let cloudflareStreamPluginPreviewModal = getCachedElement(
+    modalContainerCacheKey,
+  )?.element;
 
   if (!cloudflareStreamPluginPreviewModal) {
     cloudflareStreamPluginPreviewModal = document.createElement('div');
@@ -35,7 +38,7 @@ export default async function openPreviewModal(
 
     cloudflareStreamPluginPreviewModal.innerHTML = modal;
 
-    const snippet = snippets[mediaName];
+    const { snippet, uId, config } = snippets[mediaName];
 
     const previewContainer = cloudflareStreamPluginPreviewModal.querySelector(
       '#flotiq-ui-plugin-cloudflare-stream-snippet-in-modal-preview',
@@ -49,19 +52,44 @@ export default async function openPreviewModal(
       '#flotiq-ui-plugin-cloudflare-stream-snippet-settings-container',
     );
 
+    const loaderContainer = cloudflareStreamPluginPreviewModal.querySelector(
+      '#flotiq-ui-plugin-cloudflare-stream-modal-loader-container',
+    );
+
+    const saveSettingsButton = cloudflareStreamPluginPreviewModal.querySelector(
+      '#flotiq-ui-plugin-cloudflare-stream-save-settings-button',
+    );
+
     previewContainer.innerHTML = snippet;
     snippetContainer.textContent = snippet;
 
     //@todo add translations
-    settingsContainer.innerHTML = settings
-      .map((settingsElement) => buildSwitch(settingsElement))
+    settingsContainer.innerHTML = Object.keys(config)
+      .map((settingsElement) =>
+        buildSwitch(settingsElement, config[settingsElement]),
+      )
       .join('');
+
+    handleVideoSettingsChange(
+      settingsContainer,
+      previewContainer,
+      snippetContainer,
+      loaderContainer,
+      saveSettingsButton,
+      sidebarSnippetRef,
+      config,
+      customerSubDomain,
+      uId,
+      mediaName,
+      saveSnippet,
+      modalContainerCacheKey,
+      containerCacheKey,
+    );
   }
 
-  const result = await openModal({
+  await openModal({
     title: 'Video settings',
     size: '3xl',
     content: cloudflareStreamPluginPreviewModal,
-    hideClose: true,
   });
 }

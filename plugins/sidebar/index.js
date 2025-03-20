@@ -12,7 +12,6 @@ import openPreviewModal from './lib/openPreviewModal.js';
 export const createSidebar = (
   contentObject,
   apiUrl,
-  { apiKey, accountId, customerSubDomain, snippets },
   spaceId,
   toast,
   openModal,
@@ -58,11 +57,7 @@ export const createSidebar = (
       loader,
       codeSnippet,
       mediaName,
-      apiKey,
-      accountId,
-      customerSubDomain,
       toast,
-      snippets,
       saveSnippet,
     );
 
@@ -73,9 +68,6 @@ export const createSidebar = (
         codeSnippet,
         mediaUrl,
         mediaName,
-        apiKey,
-        accountId,
-        customerSubDomain,
         toast,
       );
     });
@@ -85,9 +77,10 @@ export const createSidebar = (
         openModal,
         mediaName,
         contentObject.id,
-        customerSubDomain,
-        snippets,
         mediaName,
+        saveSnippet,
+        containerCacheKey,
+        codeSnippet,
       );
     });
 

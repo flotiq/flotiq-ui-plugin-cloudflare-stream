@@ -1,4 +1,4 @@
-import { registerFn } from '../common/plugin-element-cache';
+import { addObjectToCache, registerFn } from '../common/plugin-element-cache';
 import pluginInfo from '../plugin-manifest.json';
 import cssString from 'inline:./styles/style.css';
 import { handleManagePlugin } from './manage/index.js';
@@ -49,6 +49,7 @@ registerFn(
       'flotiq.form.sidebar-panel::add',
       ({ contentType, contentObject }) => {
         const settings = parsePluginSettings(getPluginSettings());
+        addObjectToCache('settings', settings);
 
         if (
           !settings ||
@@ -61,13 +62,11 @@ registerFn(
 
         const spaceId = getSpaceId();
         const apiUrl = getApiUrl();
-
-        const saveSnippet = buildSaveSnippetToConfig(client, settings, toast);
+        const saveSnippet = buildSaveSnippetToConfig(client, toast);
 
         return createSidebar(
           contentObject,
           apiUrl,
-          settings,
           spaceId,
           toast,
           openModal,

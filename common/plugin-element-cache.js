@@ -26,6 +26,10 @@ export const getCachedElement = (key) => {
   return appRoots[key];
 };
 
+export const deleteCachedElement = (key) => {
+  delete appRoots[key];
+};
+
 export const addObjectToCache = (key, data = {}) => {
   appRoots[key] = data;
 };
