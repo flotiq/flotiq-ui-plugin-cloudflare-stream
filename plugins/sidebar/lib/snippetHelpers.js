@@ -52,6 +52,7 @@ export function getSnippet(
 }
 
 /**
+ * Build switch input
  * @param {string} name
  * @param {string} label
  * @param {boolean} selected
@@ -74,20 +75,20 @@ export function buildSwitch(name, label, selected) {
 }
 
 /**
- *
+ * Handle saving snippet settings into plugin config
  * @param {HTMLDivElement} container
  * @param {HTMLDivElement} previewRef
  * @param {HTMLPreElement} snippetRef
  * @param {HTMLDivElement} loaderRef
  * @param {HTMLButtonElement} saveSettingsButtonRef
- * @param {HTMLElement} sidebarSnippetRef
+ * @param {function} saveSettingsButtonCallback
+ * @param {HTMLElement|null} sidebarSnippetRef
  * @param {object} config
  * @param {string} customerSubDomain
  * @param {string} uId
  * @param {string} mediaName
- * @param {function} saveSnippet
  * @param {string} modalContainerCacheKey
- * @param {string} containerCacheKey
+ * @param {function|null} closeModal
  */
 export function handleVideoSettingsChange(
   container,
@@ -95,14 +96,14 @@ export function handleVideoSettingsChange(
   snippetRef,
   loaderRef,
   saveSettingsButtonRef,
+  saveSettingsButtonCallback,
   sidebarSnippetRef,
   config,
   customerSubDomain,
   uId,
   mediaName,
-  saveSnippet,
   modalContainerCacheKey,
-  containerCacheKey,
+  closeModal,
 ) {
   const newConfig = { ...config };
 
@@ -124,21 +125,33 @@ export function handleVideoSettingsChange(
       });
     });
 
-  saveSettingsButtonRef.addEventListener('click', () => {
+  saveSettingsButtonRef.addEventListener('click', async () => {
     loaderRef.classList.add(
       'flotiq-ui-plugin-cloudflare-stream-modal-loader-container--load',
     );
-
     const snippet = snippetRef.textContent;
-    sidebarSnippetRef.textContent = snippet;
+    if (sidebarSnippetRef !== null) {
+      sidebarSnippetRef.textContent = snippet;
+    }
     //@todo add success message
-    //@todo add error handling
-    saveSnippet(mediaName, uId, snippet, newConfig).then(() => {
+
+    try {
+      await saveSettingsButtonCallback(mediaName, uId, snippet, newConfig);
+      deleteCachedElement(modalContainerCacheKey);
+      if (closeModal) {
+        closeModal(modalContainerCacheKey, {
+          mediaName,
+          uId,
+          snippet,
+          newConfig,
+        });
+      }
+    } catch (e) {
+      //@todo add error handling
+    } finally {
       loaderRef.classList.remove(
         'flotiq-ui-plugin-cloudflare-stream-modal-loader-container--load',
       );
-      deleteCachedElement(containerCacheKey);
-      deleteCachedElement(modalContainerCacheKey);
-    });
+    }
   });
 }

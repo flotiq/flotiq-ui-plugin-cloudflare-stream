@@ -10,6 +10,16 @@ import handleSaveVideo from './lib/handleSaveVideo.js';
 import openPreviewModal from './lib/openPreviewModal.js';
 import i18n from 'i18next';
 
+/**
+ * Create sidebar plugin window
+ * @param {object} contentObject
+ * @param {string} apiUrl
+ * @param {string} spaceId
+ * @param {object} toast
+ * @param {function} openModal
+ * @param saveSnippet
+ * @returns {*}
+ */
 export const createSidebar = (
   contentObject,
   apiUrl,
@@ -91,13 +101,11 @@ export const createSidebar = (
     previewModeBtn.addEventListener('click', () => {
       openPreviewModal(
         openModal,
-        mediaName,
         contentObject.id,
         mediaName,
         saveSnippet,
-        containerCacheKey,
-        codeSnippet,
         toast,
+        codeSnippet,
       );
     });
 

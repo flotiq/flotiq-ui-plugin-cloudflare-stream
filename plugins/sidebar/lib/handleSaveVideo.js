@@ -3,7 +3,7 @@ import {
   addObjectToCache,
   getCachedElement,
 } from '../../../common/plugin-element-cache.js';
-import { saveVideo } from './cloudflareApi.js';
+import { saveVideo } from '../../../common/cloudflareApi.js';
 import i18n from '../../../i18n.js';
 
 /**
@@ -14,7 +14,7 @@ import i18n from '../../../i18n.js';
  * @param {string} mediaUrl
  * @param {string} mediaName
  * @param {function} saveSnippet
- * @param  toast
+ * @param {object} toast
  */
 export default function handleSaveVideo(
   buttonElement,

@@ -83,9 +83,6 @@ export function buildSaveSnippetToConfig(client, toast) {
       toast.error(i18n.t('settingsUpdateError'), { duration: 5000 });
       return;
     }
-
-    const newEncodedSettings = encodePluginSettings(newSettings);
-    addObjectToCache('settings', newEncodedSettings);
-    return newEncodedSettings;
+    addObjectToCache('settings', encodePluginSettings(newSettings));
   };
 }

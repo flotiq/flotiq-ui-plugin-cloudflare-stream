@@ -1,5 +1,5 @@
 import { getSnippet } from './snippetHelpers.js';
-import { getVideo } from './cloudflareApi.js';
+import { getVideo } from '../../../common/cloudflareApi.js';
 import { getCachedElement } from '../../../common/plugin-element-cache.js';
 import i18n from '../../../i18n';
 

@@ -7,10 +7,7 @@ import {
   buildSaveSnippetToConfig,
   parsePluginSettings,
 } from '../common/helpers.js';
-import {
-  imgCustomVideoPopup,
-  initVideoModalPlugin,
-} from './object-form/joditInsertVideoPlugin.js';
+import { initVideoModalPlugin } from './object-form/joditInsertVideoPlugin.js';
 
 const videoMimeTypes = [
   'video/mp4',
@@ -39,6 +36,7 @@ registerFn(
       getSpaceId,
       getApiUrl,
       openModal,
+      closeModal,
       openSchemaModal,
       Jodit,
     },
@@ -93,19 +91,18 @@ registerFn(
       initVideoModalPlugin(
         Jodit,
         openSchemaModal,
+        openModal,
+        closeModal,
         client,
         spaceId,
         getApiUrl(),
         saveSnippet,
+        toast,
       );
       if (properties?.inputType === 'richtext') {
         config.editorConfig = {
           ...config.editorConfig,
           extraButtons: ['|', 'custom-video'],
-          popup: {
-            ...Jodit.defaultOptions.popup,
-            img: [...Jodit.defaultOptions.popup['img'], imgCustomVideoPopup],
-          },
         };
       }
     });

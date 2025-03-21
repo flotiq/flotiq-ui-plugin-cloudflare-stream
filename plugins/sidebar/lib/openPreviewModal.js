@@ -4,33 +4,33 @@ import modal from 'inline:../../templates/modal.html';
 import { buildSwitch, handleVideoSettingsChange } from './snippetHelpers.js';
 import i18n from '../../../i18n';
 
-//@todo move modal title, btn title, and btn callback to props
 /**
- *
+ * Open preview snippet modal
  * @param {function} openModal
- * @param {string} mediaUrl
  * @param {string} contentObjectId
  * @param {string} mediaName
- * @param {function} saveSnippet
- * @param {string} containerCacheKey
- * @param {HTMLElement} sidebarSnippetRef
+ * @param {function} saveSettingsButtonCallback
  * @param {object} toast
+ * @param {HTMLElement|null} sidebarSnippetRef
+ * @param {string} modalTitleTranslationKey
+ * @param {string} modalButtonTranslationKey
+ * @param {function|null} closeModal
  * @returns {Promise<void>}
  */
 export default async function openPreviewModal(
   openModal,
-  mediaUrl,
   contentObjectId,
   mediaName,
-  saveSnippet,
-  containerCacheKey,
-  sidebarSnippetRef,
+  saveSettingsButtonCallback,
   toast,
+  sidebarSnippetRef = null,
+  modalTitleTranslationKey = 'modal.title',
+  modalButtonTranslationKey = 'modal.saveSettings',
+  closeModal = null,
 ) {
   const { customerSubDomain, snippets } = getCachedElement('settings');
 
-  //@todo add modal title to cache key
-  const modalContainerCacheKey = `${pluginInfo.id}-${contentObjectId}-cloudflare-stream-plugin-preview-modal`;
+  const modalContainerCacheKey = `${pluginInfo.id}-${contentObjectId}-${modalTitleTranslationKey}-cloudflare-stream-plugin-preview-modal`;
   let cloudflareStreamPluginPreviewModal = getCachedElement(
     modalContainerCacheKey,
   )?.element;
@@ -73,7 +73,7 @@ export default async function openPreviewModal(
       '.flotiq-ui-plugin-cloudflare-stream-snippet-header-content',
     );
 
-    copyToClipboardBtn.textContent = i18n.t('modal.saveSettings');
+    saveSettingsButton.textContent = i18n.t(modalButtonTranslationKey);
     snippetHeader.textContent = i18n.t('snippet');
 
     previewContainer.innerHTML = snippet;
@@ -95,14 +95,14 @@ export default async function openPreviewModal(
       snippetContainer,
       loaderContainer,
       saveSettingsButton,
+      saveSettingsButtonCallback,
       sidebarSnippetRef,
       config,
       customerSubDomain,
       uId,
       mediaName,
-      saveSnippet,
       modalContainerCacheKey,
-      containerCacheKey,
+      closeModal,
     );
 
     copyToClipboardBtn.addEventListener('click', () => {
@@ -113,7 +113,8 @@ export default async function openPreviewModal(
   }
 
   await openModal({
-    title: i18n.t('modal.title'),
+    id: modalContainerCacheKey,
+    title: i18n.t(modalTitleTranslationKey),
     size: '3xl',
     content: cloudflareStreamPluginPreviewModal,
   });

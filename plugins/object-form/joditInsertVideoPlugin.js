@@ -1,131 +1,37 @@
 import { playIcon } from './icons.js';
-import {
-  fetchMediaObject,
-  getMediaName,
-  getMediaUrl,
-} from '../../common/helpers.js';
-import { getVideo, saveVideo } from '../sidebar/lib/cloudflareApi.js';
-import { getCachedElement } from '../../common/plugin-element-cache.js';
-import { getSnippet } from '../sidebar/lib/snippetHelpers.js';
-
-const attributeName = 'data-cloudflare-stream-widget';
-
-async function findVideo(mediaName, apiKey, accountId, videoUrl) {
-  const cfVideo = await getVideo(mediaName, apiKey, accountId);
-  const response = await cfVideo.json();
-  if (response.length !== 0) {
-    return response[0];
-  }
-
-  const savedVideo = await saveVideo(videoUrl, mediaName, apiKey, accountId);
-  return await savedVideo.json();
-}
-
-const openVideoWidgetModal = async (
-  openSchemaModal,
-  client,
-  spaceId,
-  apiUrl,
-  saveSnippet,
-) =>
-  openSchemaModal({
-    title: 'Osadź obrazek z wideo',
-    size: 'lg',
-    form: {
-      options: {
-        onSubmit: async (values, modalInstance) => {
-          //@todo save video into CF
-
-          const { apiKey, accountId, customerSubDomain, snippets } =
-            getCachedElement('settings');
-
-          try {
-            const mediaObject = await fetchMediaObject(
-              values.video?.[0]?.dataUrl,
-              client,
-            );
-            const mediaName = getMediaName(spaceId, mediaObject);
-
-            if (snippets?.[mediaName]) {
-              modalInstance.resolve(snippets?.[mediaName]);
-              return;
-            }
-
-            const cfVideo = await findVideo(
-              mediaName,
-              apiKey,
-              accountId,
-              getMediaUrl(apiUrl, mediaObject),
-            );
-
-            const snippet = getSnippet(customerSubDomain, cfVideo.uid);
-            const newSettings = await saveSnippet(
-              mediaName,
-              cfVideo.uid,
-              snippet,
-            );
-
-            modalInstance.resolve(newSettings.snippets[mediaName]);
-          } catch (e) {
-            //@todo add error handling
-          }
-        },
-      },
-      schema: {
-        id: 'canews.custom-video-form', //@todo change id
-        metaDefinition: {
-          order: ['video'],
-          propertiesConfig: {
-            video: {
-              label: 'Wideo',
-              helpText: '',
-              unique: false,
-              validation: {
-                relationContenttype: '_media',
-              },
-              inputType: 'datasource',
-            },
-          },
-        },
-        schemaDefinition: {
-          additionalProperties: false,
-          required: ['video'],
-          type: 'object',
-          allOf: [
-            {
-              $ref: '#/components/schemas/AbstractContentTypeSchemaDefinition',
-            },
-            {
-              type: 'object',
-              properties: {
-                video: {
-                  type: 'array',
-                  items: {
-                    $ref: '#/components/schemas/DataSource',
-                  },
-                },
-              },
-            },
-          ],
-        },
-      },
-    },
-  });
+import openPreviewModal from '../sidebar/lib/openPreviewModal.js';
+import { openVideoModal } from './lib/openVideoModal.js';
+import i18n from '../../i18n.js';
 
 //@todo add translations
+/**
+ * Init video picking modal, open preview modal and insert snippet into editor
+ * @param {object} Jodit
+ * @param {function} openSchemaModal
+ * @param {function} openModal
+ * @param {function} closeModal
+ * @param {object} client
+ * @param {string} spaceId
+ * @param {string} apiUrl
+ * @param saveSnippet
+ * @param {object} toast
+ */
 export function initVideoModalPlugin(
   Jodit,
   openSchemaModal,
+  openModal,
+  closeModal,
   client,
   spaceId,
   apiUrl,
   saveSnippet,
+  toast,
 ) {
   Jodit.defaultOptions.controls['custom-video'] = {
     icon: playIcon,
     tooltip: 'Osadź obrazek z wideo',
     exec: async (editor) => {
-      const values = await openVideoWidgetModal(
+      const { mediaName, contentObject, ok } = await openVideoModal(
         openSchemaModal,
         client,
         spaceId,
@@ -133,31 +39,37 @@ export function initVideoModalPlugin(
         saveSnippet,
       );
 
-      console.log(values);
-      //@todo open preview modal
+      //@todo add validation if video media was selected
+
+      if (!ok) {
+        toast.error(i18n.t('errorMessage'), { duration: 5000 });
+        return;
+      }
+
+      let snippetContent = '';
+
+      const saveBtnCallback = async (mediaName, uId, snippet, _) => {
+        snippetContent = snippet;
+      };
+
+      //@todo add translations
+      await openPreviewModal(
+        openModal,
+        contentObject.id,
+        mediaName,
+        saveBtnCallback,
+        toast,
+        null,
+        '',
+        '',
+        closeModal,
+      );
+
+      const iframeContainer = document.createElement('div');
+      iframeContainer.innerHTML = snippetContent;
+
+      editor.selection.insertHTML(iframeContainer);
+      editor.synchronizeValues();
     },
   };
 }
-
-//@todo add translations
-export const imgCustomVideoPopup = {
-  name: 'widget',
-  icon: playIcon,
-  tooltip: 'Otwórz wideo jako widżet',
-  isActive: (_, selection) => {
-    return !!selection.target.parentElement?.getAttribute(attributeName);
-  },
-  isDisabled: (_, selection) => {
-    const parent = selection.target.parentElement;
-    if (!parent || parent?.nodeName !== 'A' || !parent?.href) return true;
-    return !parent.href.match(/.(webm|mov|mp4|m4p|m4v|avi|qt)$/);
-  },
-  exec: async (_, element) => {
-    if (!element.parentElement) return;
-    if (element.parentElement.getAttribute(attributeName)) {
-      element.parentElement.removeAttribute(attributeName);
-    } else {
-      element.parentElement.setAttribute(attributeName, true);
-    }
-  },
-};
