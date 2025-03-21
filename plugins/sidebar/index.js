@@ -87,6 +87,7 @@ export const createSidebar = (
       );
     });
 
+    //@todo add close warning modal when settings are changed but not saved
     previewModeBtn.addEventListener('click', () => {
       openPreviewModal(
         openModal,

@@ -29,12 +29,18 @@ export function parsePluginSettings(settings) {
   return encodePluginSettings(parsedSettings);
 }
 
-export function getMediaUrl(getApiUrl, contentObject) {
-  return `${getApiUrl}${contentObject.url}`;
+export function getMediaUrl(apiUrl, contentObject) {
+  return `${apiUrl}${contentObject.url}`;
 }
 
 export function getMediaName(spaceId, contentObject) {
   return `${spaceId}-${contentObject.id}`;
+}
+
+export async function fetchMediaObject(dataUrl, client) {
+  if (!dataUrl) return;
+  const imageId = dataUrl.split('/api/v1/content/_media/')?.pop();
+  return imageId ? (await client['_media'].get(imageId)).body : '';
 }
 
 export const DEFAULT_OPTIONS = {
@@ -77,6 +83,9 @@ export function buildSaveSnippetToConfig(client, toast) {
       toast.error(i18n.t('settingsUpdateError'), { duration: 5000 });
       return;
     }
-    addObjectToCache('settings', encodePluginSettings(newSettings));
+
+    const newEncodedSettings = encodePluginSettings(newSettings);
+    addObjectToCache('settings', newEncodedSettings);
+    return newEncodedSettings;
   };
 }

@@ -4,6 +4,7 @@ import modal from 'inline:../../templates/modal.html';
 import { buildSwitch, handleVideoSettingsChange } from './snippetHelpers.js';
 import i18n from '../../../i18n';
 
+//@todo move modal title, btn title, and btn callback to props
 /**
  *
  * @param {function} openModal
@@ -28,6 +29,7 @@ export default async function openPreviewModal(
 ) {
   const { customerSubDomain, snippets } = getCachedElement('settings');
 
+  //@todo add modal title to cache key
   const modalContainerCacheKey = `${pluginInfo.id}-${contentObjectId}-cloudflare-stream-plugin-preview-modal`;
   let cloudflareStreamPluginPreviewModal = getCachedElement(
     modalContainerCacheKey,

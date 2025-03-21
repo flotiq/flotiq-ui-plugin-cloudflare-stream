@@ -7,6 +7,10 @@ import {
   buildSaveSnippetToConfig,
   parsePluginSettings,
 } from '../common/helpers.js';
+import {
+  imgCustomVideoPopup,
+  initVideoModalPlugin,
+} from './object-form/joditInsertVideoPlugin.js';
 
 const videoMimeTypes = [
   'video/mp4',
@@ -29,7 +33,15 @@ registerFn(
   (
     handler,
     client,
-    { toast, getPluginSettings, getSpaceId, getApiUrl, openModal },
+    {
+      toast,
+      getPluginSettings,
+      getSpaceId,
+      getApiUrl,
+      openModal,
+      openSchemaModal,
+      Jodit,
+    },
   ) => {
     /**
      * Add plugin styles to the head of the document
@@ -40,6 +52,8 @@ registerFn(
       style.textContent = cssString;
       document.head.appendChild(style);
     }
+
+    const spaceId = getSpaceId();
 
     handler.on('flotiq.plugins.manage::form-schema', () =>
       handleManagePlugin(),
@@ -60,13 +74,11 @@ registerFn(
           return;
         }
 
-        const spaceId = getSpaceId();
-        const apiUrl = getApiUrl();
         const saveSnippet = buildSaveSnippetToConfig(client, toast);
 
         return createSidebar(
           contentObject,
-          apiUrl,
+          getApiUrl(),
           spaceId,
           toast,
           openModal,
@@ -74,5 +86,28 @@ registerFn(
         );
       },
     );
+
+    handler.on('flotiq.form.field::config', ({ properties, config }) => {
+      const saveSnippet = buildSaveSnippetToConfig(client, toast);
+
+      initVideoModalPlugin(
+        Jodit,
+        openSchemaModal,
+        client,
+        spaceId,
+        getApiUrl(),
+        saveSnippet,
+      );
+      if (properties?.inputType === 'richtext') {
+        config.editorConfig = {
+          ...config.editorConfig,
+          extraButtons: ['|', 'custom-video'],
+          popup: {
+            ...Jodit.defaultOptions.popup,
+            img: [...Jodit.defaultOptions.popup['img'], imgCustomVideoPopup],
+          },
+        };
+      }
+    });
   },
 );

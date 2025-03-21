@@ -10,6 +10,11 @@
       "ctdName": "_plugin_settings",
       "canUpdate": true,
       "type": "CO"
+    },
+    {
+      "ctdName": "_media",
+      "canRead": true,
+      "type": "CO"
     }
   ]
 }

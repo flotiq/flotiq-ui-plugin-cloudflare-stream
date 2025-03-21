@@ -88,7 +88,6 @@ export function buildSwitch(name, label, selected) {
  * @param {function} saveSnippet
  * @param {string} modalContainerCacheKey
  * @param {string} containerCacheKey
-
  */
 export function handleVideoSettingsChange(
   container,
