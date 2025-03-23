@@ -13,6 +13,7 @@ i18n.init({
         copySuccess: 'Code copied to clipboard!',
         videoSavedInCloudflare: 'Video saved in cloudflare',
         errorMessage: 'Something went wrong in Cloudflare Video plugin',
+        notVideoMediaWasSelected: 'Non video Media selected',
         settingsUpdateError: 'Something went wrong while updating settings',
         joditToolTip: 'Embed snippet with video',
         settings: {
@@ -50,6 +51,7 @@ i18n.init({
         copySuccess: 'Kod skopiowany do schowka!',
         videoSavedInCloudflare: 'Wideo zapisane w Cloudflare',
         errorMessage: 'Coś poszło nie tak we wtyczce Cloudflare Video',
+        notVideoMediaWasSelected: 'Wybrane Media to nie Video',
         settingsUpdateError: 'Coś poszło nie tak podczas aktualizacji ustawień',
         joditToolTip: 'Osadź kod z wideo',
         settings: {

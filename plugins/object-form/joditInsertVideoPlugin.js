@@ -30,7 +30,7 @@ export function initVideoModalPlugin(
     icon: playIcon,
     tooltip: i18n.t('joditToolTip'),
     exec: async (editor) => {
-      const { mediaName, contentObject, ok } = await openVideoModal(
+      const result = await openVideoModal(
         openSchemaModal,
         client,
         spaceId,
@@ -38,10 +38,16 @@ export function initVideoModalPlugin(
         saveSnippet,
       );
 
-      //@todo add validation if video media was selected
+      if (!result) {
+        return;
+      }
+
+      const { mediaName, contentObject, message, ok } = result;
 
       if (!ok) {
-        toast.error(i18n.t('errorMessage'), { duration: 5000 });
+        toast.error(i18n.t(message ? message : 'errorMessage'), {
+          duration: 5000,
+        });
         return;
       }
 

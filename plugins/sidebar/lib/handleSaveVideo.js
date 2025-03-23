@@ -7,7 +7,7 @@ import { saveVideo } from '../../../common/cloudflareApi.js';
 import i18n from '../../../i18n.js';
 
 /**
- * Handles saving video to cloudflare streaming
+ * Handles saving video to cloudflare streaming, then save in settings
  * @param {HTMLButtonElement} buttonElement
  * @param {HTMLDivElement} loaderElement
  * @param {HTMLElement} codeSnippetElement

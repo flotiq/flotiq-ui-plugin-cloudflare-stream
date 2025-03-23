@@ -4,7 +4,7 @@ import { getCachedElement } from '../../../common/plugin-element-cache.js';
 import i18n from '../../../i18n';
 
 /**
- *
+ * check if video exists in settings if not fetch from CF and save in settings
  * @param {HTMLButtonElement} buttonElement
  * @param {HTMLDivElement} loaderElement
  * @param {HTMLElement}codeSnippetElement

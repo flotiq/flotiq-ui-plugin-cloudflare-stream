@@ -6,24 +6,9 @@ import { createSidebar } from './sidebar/index.js';
 import {
   buildSaveSnippetToConfig,
   parsePluginSettings,
+  videoMimeTypes,
 } from '../common/helpers.js';
 import { initVideoModalPlugin } from './object-form/joditInsertVideoPlugin.js';
-
-const videoMimeTypes = [
-  'video/mp4',
-  'video/webm',
-  'video/ogg',
-  'video/x-matroska',
-  'video/x-msvideo',
-  'video/quicktime',
-  'video/mpeg',
-  'video/x-flv',
-  'video/3gpp',
-  'video/3gpp2',
-  'video/x-ms-wmv',
-];
-
-export default videoMimeTypes;
 
 registerFn(
   pluginInfo,
@@ -91,7 +76,11 @@ registerFn(
     );
 
     handler.on('flotiq.form.field::config', ({ properties, config }) => {
-      const saveSnippet = buildSaveSnippetToConfig(client, toast);
+      const saveSnippet = buildSaveSnippetToConfig(
+        client,
+        toast,
+        setPluginSettings,
+      );
 
       initVideoModalPlugin(
         Jodit,

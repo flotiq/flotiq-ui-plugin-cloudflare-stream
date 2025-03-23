@@ -53,6 +53,20 @@ export const DEFAULT_OPTIONS = {
   lazy: false,
 };
 
+export const videoMimeTypes = [
+  'video/mp4',
+  'video/webm',
+  'video/ogg',
+  'video/x-matroska',
+  'video/x-msvideo',
+  'video/quicktime',
+  'video/mpeg',
+  'video/x-flv',
+  'video/3gpp',
+  'video/3gpp2',
+  'video/x-ms-wmv',
+];
+
 /**
  * build save snippet function
  * @param client

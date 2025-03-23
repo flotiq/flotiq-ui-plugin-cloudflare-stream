@@ -3,6 +3,7 @@ import {
   fetchMediaObject,
   getMediaName,
   getMediaUrl,
+  videoMimeTypes,
 } from '../../../common/helpers.js';
 import { getSnippet } from '../../sidebar/lib/snippetHelpers.js';
 import findVideo from './findVideo.js';
@@ -39,10 +40,24 @@ export async function openVideoModal(
               client,
             );
 
+            if (!videoMimeTypes.includes(contentObject.mimeType)) {
+              modalInstance.resolve({
+                mediaName: {},
+                contentObject: {},
+                message: 'notVideoMediaWasSelected',
+                ok: false,
+              });
+            }
+
             const mediaName = getMediaName(spaceId, contentObject);
 
             if (snippets?.[mediaName]) {
-              modalInstance.resolve({ mediaName, contentObject, ok: true });
+              modalInstance.resolve({
+                mediaName,
+                contentObject,
+                message: '',
+                ok: true,
+              });
               return;
             }
 
@@ -59,6 +74,7 @@ export async function openVideoModal(
             modalInstance.resolve({
               mediaName,
               contentObject,
+              message: '',
               ok: true,
             });
           } catch (e) {
@@ -66,6 +82,7 @@ export async function openVideoModal(
             modalInstance.resolve({
               mediaName: {},
               contentObject: {},
+              message: '',
               ok: false,
             });
           }
