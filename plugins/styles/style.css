@@ -233,14 +233,14 @@
 }
 
 /** MODAL SAVE SETTINGS BUTTON */
-.flotiq-ui-plugin-cloudflare-stream-save-settings-button-container{
+.flotiq-ui-plugin-cloudflare-stream-save-settings-button-container {
   display: flex;
   justify-content: flex-end;
   margin-top: 40px;
 }
 
 /** MODAL LOADER */
-.flotiq-ui-plugin-cloudflare-stream-modal-loader-container{
+.flotiq-ui-plugin-cloudflare-stream-modal-loader-container {
   display: none;
   position: absolute;
   justify-content: center;
@@ -249,18 +249,53 @@
   width: 100%;
   height: 100%;
   z-index: 10;
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
-.flotiq-ui-plugin-cloudflare-stream-modal-loader-container--load{
+.flotiq-ui-plugin-cloudflare-stream-modal-loader-container--load {
   display: flex;
 }
 
-.flotiq-ui-plugin-cloudflare-stream-modal-loader-container__loader{
+.flotiq-ui-plugin-cloudflare-stream-modal-loader-container__loader {
   width: 60px;
   height: 60px;
   border: 5px solid #ccc;
   border-top: 5px solid #0083fc;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+/** ====== DARK MODE ======*/
+/** CONTAINER */
+.mode-dark .flotiq-ui-plugin-cloudflare-stream-container {
+  background-color: #020617 !important;
+}
+
+/** HEADER */
+.mode-dark .flotiq-ui-plugin-cloudflare-stream-snippet-header,
+.mode-dark .flotiq-ui-plugin-cloudflare-stream-header,
+.mode-dark code,
+.mode-dark button {
+  color: #ffffff;
+}
+
+/** BUTTONS */
+.mode-dark #flotiq-ui-plugin-cloudflare-stream-button:before {
+  content: url('../images/code-white.svg');
+}
+
+.mode-dark #flotiq-ui-plugin-cloudflare-stream-preview-button:before {
+  content: url('../images/preview-white.svg');
+}
+
+.mode-dark .flotiq-ui-plugin-cloudflare-stream-snippet-header-copy {
+  content: url('../images/copy-white.svg')
+}
+/** SWITCH */
+.mode-dark .flotiq-ui-plugin-cloudflare-stream-slider {
+  background-color: #333349;
+}
+
+.mode-dark .flotiq-ui-plugin-cloudflare-stream-slider::before {
+  background-color: #636382;
 }

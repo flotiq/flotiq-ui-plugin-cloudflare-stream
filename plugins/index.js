@@ -9,6 +9,7 @@ import {
   videoMimeTypes,
 } from '../common/helpers.js';
 import { initVideoModalPlugin } from './object-form/joditInsertVideoPlugin.js';
+import i18n from 'i18next';
 
 registerFn(
   pluginInfo,
@@ -24,6 +25,7 @@ registerFn(
       openModal,
       closeModal,
       openSchemaModal,
+      getLanguage,
       Jodit,
     },
   ) => {
@@ -38,6 +40,11 @@ registerFn(
     }
 
     const spaceId = getSpaceId();
+    const language = getLanguage();
+
+    if (language !== i18n.language) {
+      i18n.changeLanguage(language);
+    }
 
     handler.on('flotiq.plugins.manage::form-schema', () =>
       handleManagePlugin(),
@@ -98,6 +105,12 @@ registerFn(
           ...config.editorConfig,
           extraButtons: ['|', 'custom-video'],
         };
+      }
+    });
+
+    handler.on('flotiq.language::changed', ({ language }) => {
+      if (language !== i18n.language) {
+        i18n.changeLanguage(language);
       }
     });
   },
