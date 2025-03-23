@@ -133,7 +133,6 @@ export function handleVideoSettingsChange(
     if (sidebarSnippetRef !== null) {
       sidebarSnippetRef.textContent = snippet;
     }
-    //@todo add success message
 
     try {
       await saveSettingsButtonCallback(mediaName, uId, snippet, newConfig);
@@ -147,7 +146,7 @@ export function handleVideoSettingsChange(
         });
       }
     } catch (e) {
-      //@todo add error handling
+      console.error(e);
     } finally {
       loaderRef.classList.remove(
         'flotiq-ui-plugin-cloudflare-stream-modal-loader-container--load',

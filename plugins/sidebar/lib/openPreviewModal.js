@@ -24,13 +24,15 @@ export default async function openPreviewModal(
   saveSettingsButtonCallback,
   toast,
   sidebarSnippetRef = null,
-  modalTitleTranslationKey = 'modal.title',
-  modalButtonTranslationKey = 'modal.saveSettings',
+  modalTitleTranslationKey = 'previewModal.title',
+  modalButtonTranslationKey = 'previewModal.saveSettings',
   closeModal = null,
 ) {
   const { customerSubDomain, snippets } = getCachedElement('settings');
 
-  const modalContainerCacheKey = `${pluginInfo.id}-${contentObjectId}-${modalTitleTranslationKey}-cloudflare-stream-plugin-preview-modal`;
+  const modalContainerCacheKey =
+    `${pluginInfo.id}-${contentObjectId}-${modalTitleTranslationKey}-` +
+    'cloudflare-stream-plugin-preview-modal';
   let cloudflareStreamPluginPreviewModal = getCachedElement(
     modalContainerCacheKey,
   )?.element;
@@ -83,7 +85,7 @@ export default async function openPreviewModal(
       .map((settingsElement) =>
         buildSwitch(
           settingsElement,
-          i18n.t(`modal.settings.${settingsElement}`),
+          i18n.t(`previewModal.settings.${settingsElement}`),
           config[settingsElement],
         ),
       )

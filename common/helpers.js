@@ -16,6 +16,7 @@ export function decodePluginSettings(settings) {
     api_key: settings.apiKey,
     account_id: settings.accountId,
     customer_sub_domain: settings.customerSubDomain,
+    snippets: settings.snippets,
   };
 }
 
@@ -53,12 +54,13 @@ export const DEFAULT_OPTIONS = {
 };
 
 /**
- *
+ * build save snippet function
  * @param client
  * @param toast
+ * @param setPluginSettings
  * @returns {Promise<void>}
  */
-export function buildSaveSnippetToConfig(client, toast) {
+export function buildSaveSnippetToConfig(client, toast, setPluginSettings) {
   return async (mediaName, uId, snippet, config = DEFAULT_OPTIONS) => {
     const settings = getCachedElement('settings');
     const decodedSettings = decodePluginSettings(settings);
@@ -66,6 +68,7 @@ export function buildSaveSnippetToConfig(client, toast) {
     const newSettings = {
       ...decodedSettings,
       snippets: {
+        ...decodedSettings.snippets,
         [mediaName]: {
           snippet,
           config,
@@ -77,6 +80,8 @@ export function buildSaveSnippetToConfig(client, toast) {
     const { body, ok } = await client['_plugin_settings'].patch(pluginInfo.id, {
       settings: JSON.stringify(newSettings),
     });
+
+    setPluginSettings(JSON.stringify(newSettings));
 
     if (!ok) {
       console.error(pluginInfo.id, 'updating plugin settings', body);

@@ -3,7 +3,6 @@ import openPreviewModal from '../sidebar/lib/openPreviewModal.js';
 import { openVideoModal } from './lib/openVideoModal.js';
 import i18n from '../../i18n.js';
 
-//@todo add translations
 /**
  * Init video picking modal, open preview modal and insert snippet into editor
  * @param {object} Jodit
@@ -29,7 +28,7 @@ export function initVideoModalPlugin(
 ) {
   Jodit.defaultOptions.controls['custom-video'] = {
     icon: playIcon,
-    tooltip: 'Osadź obrazek z wideo',
+    tooltip: i18n.t('joditToolTip'),
     exec: async (editor) => {
       const { mediaName, contentObject, ok } = await openVideoModal(
         openSchemaModal,
@@ -52,7 +51,6 @@ export function initVideoModalPlugin(
         snippetContent = snippet;
       };
 
-      //@todo add translations
       await openPreviewModal(
         openModal,
         contentObject.id,
@@ -60,8 +58,8 @@ export function initVideoModalPlugin(
         saveBtnCallback,
         toast,
         null,
-        '',
-        '',
+        'videoModal.title',
+        'videoModal.button',
         closeModal,
       );
 

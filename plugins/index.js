@@ -33,6 +33,7 @@ registerFn(
     {
       toast,
       getPluginSettings,
+      setPluginSettings,
       getSpaceId,
       getApiUrl,
       openModal,
@@ -66,13 +67,17 @@ registerFn(
         if (
           !settings ||
           !contentObject ||
-          contentType.name !== '_media' ||
+          contentType?.name !== '_media' ||
           !videoMimeTypes.includes(contentObject.mimeType)
         ) {
           return;
         }
 
-        const saveSnippet = buildSaveSnippetToConfig(client, toast);
+        const saveSnippet = buildSaveSnippetToConfig(
+          client,
+          toast,
+          setPluginSettings,
+        );
 
         return createSidebar(
           contentObject,

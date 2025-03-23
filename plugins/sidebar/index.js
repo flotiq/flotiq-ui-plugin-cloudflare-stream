@@ -1,6 +1,7 @@
 import { schema as pluginInfo } from '../manage/settings-schema.js';
 import {
   addElementToCache,
+  deleteCachedElement,
   getCachedElement,
 } from '../../common/plugin-element-cache.js';
 import { getMediaName, getMediaUrl } from '../../common/helpers.js';
@@ -97,13 +98,17 @@ export const createSidebar = (
       );
     });
 
-    //@todo add close warning modal when settings are changed but not saved
+    const saveSnippetCallback = async (mediaName, uId, snippet, newConfig) => {
+      await saveSnippet(mediaName, uId, snippet, newConfig);
+      deleteCachedElement(containerCacheKey);
+    };
+
     previewModeBtn.addEventListener('click', () => {
       openPreviewModal(
         openModal,
         contentObject.id,
         mediaName,
-        saveSnippet,
+        saveSnippetCallback,
         toast,
         codeSnippet,
       );

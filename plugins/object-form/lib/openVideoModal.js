@@ -6,6 +6,7 @@ import {
 } from '../../../common/helpers.js';
 import { getSnippet } from '../../sidebar/lib/snippetHelpers.js';
 import findVideo from './findVideo.js';
+import i18n from '../../../i18n.js';
 
 /**
  * Open modal for picking video
@@ -24,7 +25,7 @@ export async function openVideoModal(
   saveSnippet,
 ) {
   return openSchemaModal({
-    title: 'Osadź obrazek z wideo',
+    title: i18n.t('joditToolTip'),
     size: 'lg',
     form: {
       options: {
@@ -71,12 +72,12 @@ export async function openVideoModal(
         },
       },
       schema: {
-        id: 'canews.custom-video-form', //@todo change id
+        id: 'flotiq-ui-cloudflare-streaming-plugin-video-picker-modal',
         metaDefinition: {
           order: ['video'],
           propertiesConfig: {
             video: {
-              label: 'Wideo',
+              label: 'Video',
               helpText: '',
               unique: false,
               validation: {
