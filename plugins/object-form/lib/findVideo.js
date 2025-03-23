@@ -22,5 +22,6 @@ export default async function findVideo(
   }
 
   const savedVideo = await saveVideo(videoUrl, mediaName, apiKey, accountId);
-  return await savedVideo.json().result;
+
+  return (await savedVideo.json()).result;
 }
