@@ -1,6 +1,6 @@
 {
   "id": "flotiq.cloudflare-stream-plugin",
-  "name": "Cloudflare stream plugin",
+  "name": "Cloudflare video stream plugin",
   "description": "This plugin allow for easy integration of Cloudflare Stream with Flotiq",
   "version": "0.1.0",
   "repository": "https://github.com/flotiq/flotiq-ui-plugin-cloudflare-stream",
