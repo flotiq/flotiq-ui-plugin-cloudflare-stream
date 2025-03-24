@@ -16,7 +16,6 @@ import i18n from '../../../i18n.js';
  * @param {string} spaceId
  * @param {string} apiUrl
  * @param {function} saveSnippet
- * @param toast
  * @returns {Promise<object>}
  */
 export async function openVideoModal(
