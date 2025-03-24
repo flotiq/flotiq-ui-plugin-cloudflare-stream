@@ -46,6 +46,25 @@ registerFn(
       i18n.changeLanguage(language);
     }
 
+    const saveSnippet = buildSaveSnippetToConfig(
+      client,
+      toast,
+      setPluginSettings,
+    );
+
+    // Initialize Jodit plugin
+    initVideoModalPlugin(
+      Jodit,
+      openSchemaModal,
+      openModal,
+      closeModal,
+      client,
+      spaceId,
+      getApiUrl(),
+      saveSnippet,
+      toast,
+    );
+
     handler.on('flotiq.plugins.manage::form-schema', () =>
       handleManagePlugin(),
     );
@@ -65,12 +84,6 @@ registerFn(
           return;
         }
 
-        const saveSnippet = buildSaveSnippetToConfig(
-          client,
-          toast,
-          setPluginSettings,
-        );
-
         return createSidebar(
           contentObject,
           getApiUrl(),
@@ -83,23 +96,6 @@ registerFn(
     );
 
     handler.on('flotiq.form.field::config', ({ properties, config }) => {
-      const saveSnippet = buildSaveSnippetToConfig(
-        client,
-        toast,
-        setPluginSettings,
-      );
-
-      initVideoModalPlugin(
-        Jodit,
-        openSchemaModal,
-        openModal,
-        closeModal,
-        client,
-        spaceId,
-        getApiUrl(),
-        saveSnippet,
-        toast,
-      );
       if (properties?.inputType === 'richtext') {
         config.editorConfig = {
           ...config.editorConfig,

@@ -53,7 +53,7 @@ export function initVideoModalPlugin(
 
       let snippetContent = '';
 
-      const saveBtnCallback = async (mediaName, uId, snippet, _) => {
+      const saveBtnCallback = async (_mediaName, _uId, snippet) => {
         snippetContent = snippet;
       };
 
