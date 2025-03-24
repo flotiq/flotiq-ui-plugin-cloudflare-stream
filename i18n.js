@@ -14,6 +14,8 @@ i18n.init({
         videoSavedInCloudflare: 'Video saved in cloudflare',
         errorMessage: 'Something went wrong in Cloudflare Video plugin',
         notVideoMediaWasSelected: 'Non video Media selected',
+        videoNotReadyForStreaming:
+          'The video is not ready for streaming. Please check back in a while.',
         settingsUpdateError: 'Something went wrong while updating settings',
         joditToolTip: 'Embed snippet with video',
         settings: {
@@ -52,6 +54,8 @@ i18n.init({
         videoSavedInCloudflare: 'Wideo zapisane w Cloudflare',
         errorMessage: 'Coś poszło nie tak we wtyczce Cloudflare Video',
         notVideoMediaWasSelected: 'Wybrane Media to nie Video',
+        videoNotReadyForStreaming:
+          'Wideo nie jest gotowe do streamingu. Spróbuj ponownie za chwilę.',
         settingsUpdateError: 'Coś poszło nie tak podczas aktualizacji ustawień',
         joditToolTip: 'Osadź kod z wideo',
         settings: {

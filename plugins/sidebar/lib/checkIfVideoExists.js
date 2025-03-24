@@ -7,6 +7,7 @@ import i18n from '../../../i18n';
  * check if video exists in settings if not fetch from CF and save in settings
  * @param {HTMLButtonElement} buttonElement
  * @param {HTMLDivElement} loaderElement
+ * @param {HTMLButtonElement}  previewModeBtn
  * @param {HTMLElement}codeSnippetElement
  * @param {string} mediaName
  * @param {object} toast
@@ -15,6 +16,7 @@ import i18n from '../../../i18n';
 export default function checkIfVideoExist(
   buttonElement,
   loaderElement,
+  previewModeBtn,
   codeSnippetElement,
   mediaName,
   saveSnippet,
@@ -22,7 +24,6 @@ export default function checkIfVideoExist(
 ) {
   const { apiKey, accountId, customerSubDomain, snippets } =
     getCachedElement('settings');
-
   if (!snippets?.[mediaName]) {
     getVideo(mediaName, apiKey, accountId)
       .then((response) => response.json())
@@ -35,11 +36,19 @@ export default function checkIfVideoExist(
         }
 
         const media = result[0];
-
         const snippet = getSnippet(customerSubDomain, media.uid);
-
-        await saveSnippet(mediaName, media.uid, snippet);
         codeSnippetElement.textContent = snippet;
+
+        console.log(media.readyToStream);
+
+        if (media.readyToStream === true) {
+          await saveSnippet(mediaName, media.uid, snippet);
+          previewModeBtn.disabled = false;
+        } else {
+          toast.success(i18n.t('videoNotReadyForStreaming'), {
+            duration: 10000,
+          });
+        }
 
         loaderElement.classList.remove(
           'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
@@ -56,6 +65,7 @@ export default function checkIfVideoExist(
     return;
   }
 
+  previewModeBtn.disabled = false;
   loaderElement.classList.remove(
     'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
   );

@@ -80,6 +80,7 @@ export const createSidebar = (
     checkIfVideoExist(
       saveVideoBtn,
       loader,
+      previewModeBtn,
       codeSnippet,
       mediaName,
       saveSnippet,
@@ -89,6 +90,7 @@ export const createSidebar = (
     saveVideoBtn.addEventListener('click', () => {
       handleSaveVideo(
         saveVideoBtn,
+        previewModeBtn,
         loader,
         codeSnippet,
         mediaUrl,

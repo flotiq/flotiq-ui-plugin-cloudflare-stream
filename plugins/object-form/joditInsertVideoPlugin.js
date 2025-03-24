@@ -36,6 +36,7 @@ export function initVideoModalPlugin(
         spaceId,
         apiUrl,
         saveSnippet,
+        toast,
       );
 
       if (!result) {

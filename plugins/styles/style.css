@@ -217,7 +217,7 @@
   position: absolute;
   height: 20px;
   width: 20px;
-  left: 2px;
+  right: 2px;
   bottom: 2px;
   background-color: white;
   border-radius: 50%;
@@ -233,7 +233,7 @@
 .flotiq-ui-plugin-cloudflare-stream-toggle-switch
   input:checked
   + .flotiq-ui-plugin-cloudflare-stream-slider::before {
-  transform: translateX(26px);
+  transform: translateX(-26px);
 }
 
 /** MODAL SAVE SETTINGS BUTTON */
@@ -297,9 +297,25 @@
 }
 /** SWITCH */
 .mode-dark .flotiq-ui-plugin-cloudflare-stream-slider {
-  background-color: #333349;
+  background-color: #1E1F2C;
+  border: 1px #333349 solid;
 }
 
 .mode-dark .flotiq-ui-plugin-cloudflare-stream-slider::before {
   background-color: #636382;
+}
+
+.mode-dark .flotiq-ui-plugin-cloudflare-stream-toggle-switch
+input:checked
++ .flotiq-ui-plugin-cloudflare-stream-slider::before {
+  background-color: #1E1F2C;
+}
+
+.mode-dark .flotiq-ui-plugin-cloudflare-stream-toggle-switch
+input:checked + .flotiq-ui-plugin-cloudflare-stream-slider{
+  border: 1px #0083fc solid;
+}
+
+.mode-dark .flotiq-ui-plugin-cloudflare-stream-modal-loader-container {
+  background-color: rgba(2, 6, 23, 0.8);
 }
