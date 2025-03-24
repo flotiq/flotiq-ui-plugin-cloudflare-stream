@@ -9,7 +9,6 @@ import i18n from '../../../i18n.js';
 /**
  * Handles saving video to cloudflare streaming, then save in settings
  * @param {HTMLButtonElement} buttonElement
- * @param {HTMLButtonElement} previewModeBtn
  * @param {HTMLDivElement} loaderElement
  * @param {HTMLElement} codeSnippetElement
  * @param {string} mediaUrl
@@ -19,7 +18,6 @@ import i18n from '../../../i18n.js';
  */
 export default function handleSaveVideo(
   buttonElement,
-  previewModeBtn,
   loaderElement,
   codeSnippetElement,
   mediaUrl,
@@ -42,11 +40,8 @@ export default function handleSaveVideo(
         result.uid,
       );
 
-      if (!result.readyToStream) {
-        toast.success(i18n.t('videoNotReadyForStreaming'), {
-          duration: 10000,
-        });
-      }
+      const snippet = getSnippet(customerSubDomain, result.uid);
+      await saveSnippet(mediaName, result.uid, snippet);
 
       loaderElement.classList.remove(
         'flotiq-ui-plugin-cloudflare-stream-loader-container--load',

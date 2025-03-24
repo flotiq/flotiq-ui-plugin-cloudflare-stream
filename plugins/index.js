@@ -9,7 +9,7 @@ import {
   videoMimeTypes,
 } from '../common/helpers.js';
 import { initVideoModalPlugin } from './object-form/joditInsertVideoPlugin.js';
-import i18n from 'i18next';
+import i18n from '../i18n';
 
 registerFn(
   pluginInfo,

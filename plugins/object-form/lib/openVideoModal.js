@@ -25,7 +25,6 @@ export async function openVideoModal(
   spaceId,
   apiUrl,
   saveSnippet,
-  toast,
 ) {
   return openSchemaModal({
     title: i18n.t('joditToolTip'),
@@ -69,13 +68,6 @@ export async function openVideoModal(
               accountId,
               getMediaUrl(apiUrl, contentObject),
             );
-
-            if (!cfVideo.readyToStream) {
-              toast.success(i18n.t('videoNotReadyForStreaming'), {
-                duration: 10000,
-              });
-              modalInstance.resolve();
-            }
 
             const snippet = getSnippet(customerSubDomain, cfVideo.uid);
             await saveSnippet(mediaName, cfVideo.uid, snippet);

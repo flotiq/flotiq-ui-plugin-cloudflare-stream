@@ -9,7 +9,7 @@ import template from 'inline:../templates/template.html';
 import checkIfVideoExist from './lib/checkIfVideoExists.js';
 import handleSaveVideo from './lib/handleSaveVideo.js';
 import openPreviewModal from './lib/openPreviewModal.js';
-import i18n from 'i18next';
+import i18n from '../../i18n';
 
 /**
  * Create sidebar plugin window
@@ -90,7 +90,6 @@ export const createSidebar = (
     saveVideoBtn.addEventListener('click', () => {
       handleSaveVideo(
         saveVideoBtn,
-        previewModeBtn,
         loader,
         codeSnippet,
         mediaUrl,

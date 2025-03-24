@@ -36,19 +36,11 @@ export default function checkIfVideoExist(
         }
 
         const media = result[0];
+
         const snippet = getSnippet(customerSubDomain, media.uid);
+        await saveSnippet(mediaName, media.uid, snippet);
+
         codeSnippetElement.textContent = snippet;
-
-        console.log(media.readyToStream);
-
-        if (media.readyToStream === true) {
-          await saveSnippet(mediaName, media.uid, snippet);
-          previewModeBtn.disabled = false;
-        } else {
-          toast.success(i18n.t('videoNotReadyForStreaming'), {
-            duration: 10000,
-          });
-        }
 
         loaderElement.classList.remove(
           'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
