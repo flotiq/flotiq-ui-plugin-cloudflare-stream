@@ -28,6 +28,7 @@ After generating the snippet, it will appear in the same place as the 'Generate 
 ![](.docs/images/generated-snippet.png)
 
 #### snippet preview
+> **Warning**: The video may not be ready for streaming yet. If that's the case, you'll need to check back in a while.
 
 After clicking the 'Snippet Preview' button, a modal will open where you can adjust the video settings and preview the
 changes in real time.
