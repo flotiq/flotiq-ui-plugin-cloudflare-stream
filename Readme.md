@@ -2,7 +2,59 @@
 
 # Flotiq cloudflare stream plugin
 
-This plugin allow for easy integration of Cloudflare Stream with Flotiq
+This plugin offers seamless integration of Cloudflare Stream with Flotiq, providing users with an intuitive way to embed
+video content directly from the rich text editor. With this solution, adding Cloudflare Stream videos becomes
+effortless, eliminating the need for manual embed code insertion. It's a perfect tool for those looking to enhance their
+content with multimedia elements while keeping the process simple and efficient.
+
+## Configuration
+
+To start using the plugin, simply fill in the required details using the information from your Cloudflare account.
+
+![](.docs/images/settings.png)
+
+## Usage
+
+### Generate Snippet
+
+To generate a snippet, go to the edit page of the selected video and click 'Generate Snippet'.
+
+![](.docs/images/generete-iframe.png)
+
+### Using generated snippet
+
+After generating the snippet, it will appear in the same place as the 'Generate Snippet' button.
+
+![](.docs/images/generated-snippet.png)
+
+#### snippet preview
+> **Warning**: The video may not be ready for streaming yet. If that's the case, you'll need to check back in a while.
+
+After clicking the 'Snippet Preview' button, a modal will open where you can adjust the video settings and preview the
+changes in real time.
+
+![](.docs/images/video-settings.png)
+
+### Inserting a snippet directly from the rich text editor.
+
+To inject a snippet directly from the rich text editor, click the player icon at the end of the options bar.
+
+![](.docs/images/richtext-editor-btn.png)
+
+A modal will open, allowing you to select existing media or add new ones.
+> **Note**: The plugin only supports video media. Selecting non-video media will result in an error.
+
+![](.docs/images/media-picker-modal.png)
+
+After selecting the media, another modal will open where you can adjust the video settings, see a live preview, and
+inject it into the editor.
+
+![](.docs/images/snippet-settings.png)
+
+After clicking the 'Inject Snippet' button, the snippet will automatically be added to the rich text editor content.
+
+![](.docs/images/snippet-injected-to-editor.png)
+
 
 ## Quick start
 

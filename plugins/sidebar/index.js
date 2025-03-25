@@ -1,76 +1,33 @@
 import { schema as pluginInfo } from '../manage/settings-schema.js';
 import {
   addElementToCache,
+  deleteCachedElement,
   getCachedElement,
 } from '../../common/plugin-element-cache.js';
-import { getSnippet, getVideo, saveVideo } from './lib/index.js';
 import { getMediaName, getMediaUrl } from '../../common/helpers.js';
 import template from 'inline:../templates/template.html';
+import checkIfVideoExist from './lib/checkIfVideoExists.js';
+import handleSaveVideo from './lib/handleSaveVideo.js';
+import openPreviewModal from './lib/openPreviewModal.js';
+import i18n from '../../i18n';
 
-function checkIfVideoExist(
-  buttonElement,
-  loaderElement,
-  codeSnippetElement,
-  mediaName,
-  apiKey,
-  accountId,
-  customerSubDomain,
-) {
-  //@todo add error handling
-  getVideo(mediaName, apiKey, accountId)
-    .then((response) => response.json())
-    .then(({ result }) => {
-      loaderElement.classList.remove(
-        'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
-      );
-
-      if (result.length === 0) return;
-
-      const media = result[0];
-      codeSnippetElement.innerHTML = getSnippet(customerSubDomain, media.uid);
-      buttonElement.classList.add(
-        'flotiq-ui-plugin-cloudflare-stream-button--hidden',
-      );
-    });
-}
-
-function handleSaveVideo(
-  buttonElement,
-  loaderElement,
-  codeSnippetElement,
-  mediaUrl,
-  mediaName,
-  apiKey,
-  accountId,
-  customerSubDomain,
-  toast,
-) {
-  loaderElement.classList.add(
-    'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
-  );
-  //@todo add error handling
-  saveVideo(mediaUrl, mediaName, apiKey, accountId)
-    .then((response) => response.json())
-    .then(({ result }) => {
-      loaderElement.classList.remove(
-        'flotiq-ui-plugin-cloudflare-stream-loader-container--load',
-      );
-
-      codeSnippetElement.innerHTML = getSnippet(customerSubDomain, result.uid);
-
-      buttonElement.classList.add(
-        'flotiq-ui-plugin-cloudflare-stream-button--hidden',
-      );
-      toast.success('Video saved successfully!');
-    });
-}
-
+/**
+ * Create sidebar plugin window
+ * @param {object} contentObject
+ * @param {string} apiUrl
+ * @param {string} spaceId
+ * @param {object} toast
+ * @param {function} openModal
+ * @param saveSnippet
+ * @returns {*}
+ */
 export const createSidebar = (
   contentObject,
   apiUrl,
-  { apiKey, accountId, customerSubDomain },
   spaceId,
   toast,
+  openModal,
+  saveSnippet,
 ) => {
   const containerCacheKey = `${pluginInfo.id}-${contentObject.id || 'new'}-cloudflare-stream-plugin-container`;
   let cloudflareStreamPluginContainer =
@@ -87,8 +44,12 @@ export const createSidebar = (
 
     cloudflareStreamPluginContainer.innerHTML = template;
 
-    const btn = cloudflareStreamPluginContainer.querySelector(
+    const saveVideoBtn = cloudflareStreamPluginContainer.querySelector(
       '#flotiq-ui-plugin-cloudflare-stream-button',
+    );
+
+    const previewModeBtn = cloudflareStreamPluginContainer.querySelector(
+      '#flotiq-ui-plugin-cloudflare-stream-preview-button',
     );
 
     const loader = cloudflareStreamPluginContainer.querySelector(
@@ -103,33 +64,60 @@ export const createSidebar = (
       '#flotiq-ui-plugin-cloudflare-stream-snippet-header-copy',
     );
 
-    checkIfVideoExist(
-      btn,
-      loader,
-      codeSnippet,
-      mediaName,
-      apiKey,
-      accountId,
-      customerSubDomain,
+    const pluginHeader = cloudflareStreamPluginContainer.querySelector(
+      '.flotiq-ui-plugin-cloudflare-stream-header',
     );
 
-    btn.addEventListener('click', () => {
+    const snippetHeader = cloudflareStreamPluginContainer.querySelector(
+      '.flotiq-ui-plugin-cloudflare-stream-snippet-header-content',
+    );
+
+    saveVideoBtn.textContent = i18n.t('generateStreamIframe');
+    previewModeBtn.textContent = i18n.t('previewTool');
+    pluginHeader.textContent = i18n.t('title');
+    snippetHeader.textContent = i18n.t('snippet');
+
+    checkIfVideoExist(
+      saveVideoBtn,
+      loader,
+      previewModeBtn,
+      codeSnippet,
+      mediaName,
+      saveSnippet,
+      toast,
+    );
+
+    saveVideoBtn.addEventListener('click', () => {
       handleSaveVideo(
-        btn,
+        saveVideoBtn,
         loader,
         codeSnippet,
         mediaUrl,
         mediaName,
-        apiKey,
-        accountId,
-        customerSubDomain,
+        saveSnippet,
         toast,
+      );
+    });
+
+    const saveSnippetCallback = async (mediaName, uId, snippet, newConfig) => {
+      await saveSnippet(mediaName, uId, snippet, newConfig);
+      deleteCachedElement(containerCacheKey);
+    };
+
+    previewModeBtn.addEventListener('click', () => {
+      openPreviewModal(
+        openModal,
+        contentObject.id,
+        mediaName,
+        saveSnippetCallback,
+        toast,
+        codeSnippet,
       );
     });
 
     copyToClipboardBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(codeSnippet.innerText).then(() => {
-        toast.success('Code copied to clipboard!');
+        toast.success(i18n.t('copySuccess'), { duration: 5000 });
       });
     });
 

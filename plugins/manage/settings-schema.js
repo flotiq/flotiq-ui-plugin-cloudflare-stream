@@ -1,11 +1,10 @@
 import pluginInfo from '../../plugin-manifest.json';
+import i18n from '../../i18n.js';
 
-//@todo add translations
-//@todo add helptexts
 export const schema = {
   id: pluginInfo.id,
   name: pluginInfo.id,
-  label: pluginInfo.name,
+  label: pluginInfo?.name,
   internal: false,
   schemaDefinition: {
     type: 'object',
@@ -32,27 +31,27 @@ export const schema = {
       },
     ],
     required: ['api_key', 'account_id', 'customer_sub_domain'],
-    additionalProperties: false,
+    additionalProperties: true,
   },
   metaDefinition: {
     order: ['api_key', 'account_id', 'customer_sub_domain'],
     propertiesConfig: {
       api_key: {
-        label: 'Api token',
+        label: i18n.t('settings.apiToken'),
         unique: false,
-        helpText: '',
+        helpText: i18n.t('settings.apiTokenHelpText'),
         inputType: 'text',
       },
       account_id: {
-        label: 'Account ID',
+        label: i18n.t('settings.accountId'),
         unique: false,
-        helpText: '',
+        helpText: i18n.t('settings.accountIdHelpText'),
         inputType: 'text',
       },
       customer_sub_domain: {
-        label: 'Customer subdomain',
+        label: i18n.t('settings.customerSubDomain'),
         unique: false,
-        helpText: '',
+        helpText: i18n.t('settings.customerSubDomainHelpText'),
         inputType: 'text',
       },
     },
